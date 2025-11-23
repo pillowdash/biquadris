@@ -1,8 +1,17 @@
-import Game;
+module Game;
 import <stdexcept>;
+import Board;
+import Viewver;
 
-void Game::run() {
+void Game::run(const Viewver &viewver) {
     // Implementation of the game loop
+    while (true) {
+        // Game logic here
+
+        // Render the game state
+        viewver.drawGrid(*this);
+
+    }
 }
 
 void Game::reset() {
