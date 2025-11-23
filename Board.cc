@@ -24,7 +24,7 @@ public:
 
 };
 
-class Board {
+class Board: public Observer {
   vector <unique_ptr<vector<Cell>>> cells;
   Level* level;
   int width;
@@ -35,10 +35,10 @@ class Board {
   unique_ptr<Block> nextBlock;
   bool isBlind;
 public:
-  Board(Level *lvl = nullptr) : level{lvl}, width{11}, height{18},
+  Board(Level *lvl) : level{lvl}, width{11}, height{18},
           score{0}, highScore{0}, isBlind{false} {
           for (int r = 0; r < height; ++r) {
-            auto row = std::make_unique<std::vector<Cell>>();
+            auto row = make_unique<std::vector<Cell>>();
             row->reserve(width);
 
             for (int c = 0; c < width; ++c) {
@@ -58,30 +58,33 @@ public:
     }
 
     void clearLines() {
-        for (int r = 0; r < height; ++r) {
+        for (int row = 0; row < height; ++row) {
 
-            bool full = true;
-            for (int c = 0; c < width; ++c) {
-                if ((*cells[r])[c].getColor() == ' ') {
-                    full = false;
-                    break;
+          bool full = true;
+          for (int col = 0; col < width; ++col) {
+            if ((*cells[row])[col].getColor() == ' ') {
+              full = false;
+              break;
                 }
             }
 
             if (full) {
-                for (int rr = r; rr > 0; --rr) {
-                    cells[rr] = std::move(cells[rr - 1]);
+                for (int rowred = row; rowred > 0; --rowred) {
+                    cells[rowred] = move(cells[rowred - 1]);
                 }
 
-                auto newRow = std::make_unique<std::vector<Cell>>();
-                for (int c = 0; c < width; ++c) {
-                    newRow->emplace_back(c, 0, ' ');
+                auto newRow = make_unique<vector<Cell>>();
+                for (int col = 0; col < width; ++c) {
+                    newRow->emplace_back(col, 0, ' ');
                 }
-                cells[0] = std::move(newRow);
-                --r;       // re-check this row
+                cells[0] = move(newRow);
+                --r;
             }
         }
     }
+
+    bool getBlind() const { return isBlind;}
+    void setBlind(bool b) { isBlind = b;}
 
 
 }
