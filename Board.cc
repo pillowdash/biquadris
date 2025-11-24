@@ -1,12 +1,12 @@
 #include <memory>
 #include <vector>
 using namespace std;
-class Level
-{
-};
-class Block
-{
-};
+// class Level
+// {
+// };
+// class Block
+// {
+// };
 class Cell
 {
   const int x;

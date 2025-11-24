@@ -1,9 +1,14 @@
-//export module Block;
+export module Block;
 
-#include <iostream>
-#include <memory>
-#include <vector>
-#include <string>
+// #include <iostream>
+// #include <memory>
+// #include <vector>
+// #include <string>
+
+import <iostream>;
+import <memory>;
+import <vector>;
+import <string>;
 
 using namespace std;
 
@@ -11,52 +16,7 @@ const int BOARD_WIDTH = 11;
 const int BOARD_HEIGHT = 18;
 const int BLOCK_SIZE = 4;
 
-class Game {
-    private:
-        Board *player1;
-        Board *player2;
-        Level levelPlayer1;
-        Level levelPlayer2;
-
-    public:
-        void run();
-        void reset();
-        Level& getLevel(int player);
-};
-
-class Level {
-
-};
-
-
-class Observer {
-    public:
-    virtual void notify() = 0;
-};
-
-class Subject {
-    protected:
-    Observer *subscriber;
-
-    void notifyBoard() {
-        subscriber->notify();
-    }
-};
-
-class Subject {
-    protected:
-        Observer *subscriber;
-
-        // Notify the subscribed observer
-        void notifyBoard() {
-            subscriber->notify();
-        }
-    public:
-        Subject(Observer *obs) : subscriber{obs} {}
-        virtual ~Subject() = default;
-};
-
-struct Pos {
+export struct Pos {
     int x;
     int y;
 
@@ -67,16 +27,14 @@ struct Pos {
     }
 };
 
-class Board : public Observer {
-    
-};
-
 // TODO: use map for command parsing
-class Controller : public Subject {
+export class Controller : public Subject {
     protected: 
         Board *board;
 
-        void getInput();
+        void getInput() {
+
+        }
     public:
         Controller(Board *b) : Subject{b}, board{b} {}
 };
@@ -95,7 +53,7 @@ enum class Heaviness {
     Normal = 0
 };
 
-class Block : public Controller {
+export class Block : public Controller {
     protected:
         std::vector<Pos> positions;
         Rotation rotation;
@@ -234,11 +192,18 @@ class Block : public Controller {
         virtual char getType() const {
             return type;
         }
+        virtual void IncHeaviness() {
+            if (heaviness == Heaviness::Normal) {
+                heaviness = Heaviness::Heavy;
+            } else if (heaviness == Heaviness::Heavy) {
+                heaviness = Heaviness::VeryHeavy;
+            }
+        }
 
         virtual ~Block() = default;
 };
 
-class I : public Block {
+export class I : public Block {
 
     public:
         I(Board *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {0, 3}}, 'I'} {}
@@ -275,54 +240,54 @@ class I : public Block {
 
 
 // might be too complicated to use decorator pattern here
-class Decorator : public Block {
-    protected:
-        std::unique_ptr<Block> next;
+// class Decorator : public Block {
+//     protected:
+//         std::unique_ptr<Block> next;
 
-    public:
-        Decorator(Board *b, std::unique_ptr<Block> n)
-            : Block{b, n->getPositions(), n->getType(), n->getRotation()}, next{std::move(n)} {}
+//     public:
+//         Decorator(Board *b, std::unique_ptr<Block> n)
+//             : Block{b, n->getPositions(), n->getType(), n->getRotation()}, next{std::move(n)} {}
 
-        virtual ~Decorator() {}
-};
+//         virtual ~Decorator() {}
+// };
 
-class Heavy : public Decorator {
-    void MoveDown() {
-        for (auto &pos : positions) {
-            pos.y += 1;
-        }
-    }
+// class Heavy : public Decorator {
+//     void MoveDown() {
+//         for (auto &pos : positions) {
+//             pos.y += 1;
+//         }
+//     }
 
-    public:
-        Heavy(Board *b, std::unique_ptr<Block> n)
-            : Decorator{b, std::move(n)} {}
+//     public:
+//         Heavy(Board *b, std::unique_ptr<Block> n)
+//             : Decorator{b, std::move(n)} {}
 
-        void MoveLeft() override {
-            MoveDown();
-            next->MoveLeft();
-        }
-        void MoveRight() override {
-            MoveDown();
-            next->MoveRight();
-        }
-        std::vector<Pos> getPositions() const override {
-            return next->getPositions();
-        }
-        void RotateCounterClockWise() override {
-            MoveDown();
-            next->RotateCounterClockWise();
-        }
-        void RotateClockWise() override {
-            MoveDown();
-            next->RotateClockWise();
-        }
-        Rotation getRotation() {
-            return next->getRotation();
-        }
-        char getType() {
-            return next->getType();
-        }
-};
+//         void MoveLeft() override {
+//             MoveDown();
+//             next->MoveLeft();
+//         }
+//         void MoveRight() override {
+//             MoveDown();
+//             next->MoveRight();
+//         }
+//         std::vector<Pos> getPositions() const override {
+//             return next->getPositions();
+//         }
+//         void RotateCounterClockWise() override {
+//             MoveDown();
+//             next->RotateCounterClockWise();
+//         }
+//         void RotateClockWise() override {
+//             MoveDown();
+//             next->RotateClockWise();
+//         }
+//         Rotation getRotation() {
+//             return next->getRotation();
+//         }
+//         char getType() {
+//             return next->getType();
+//         }
+// };
 
 // it could be that two lines would clear at different spots
 
