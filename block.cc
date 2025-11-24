@@ -52,6 +52,7 @@ class Subject {
             subscriber->notify();
         }
     public:
+        Subject(Observer *obs) : subscriber{obs} {}
         virtual ~Subject() = default;
 };
 
@@ -72,6 +73,8 @@ class Controller : public Subject {
         Board *board;
 
         void getInput();
+    public:
+        Controller(Board *b) : Subject{b}, board{b} {}
 };
 
 enum class Rotation {
@@ -85,8 +88,13 @@ class Block : public Controller {
     protected:
         std::vector<Pos> positions;
         Rotation rotation;
+        char type;
 
-        // positions are relative to a reference point
+        /**
+         * helper function to get extreme coordinate
+         * @param isX: true for x-coordinate, false for y-coordinate
+         * @param findMax: true to find max, false to find min
+         */
         int getExtremeHelper(bool isX, bool findMax) const {
             int extreme = isX ? positions[0].getX() : positions[0].getY();
             for (auto &pos : positions) {
@@ -104,6 +112,10 @@ class Block : public Controller {
             return extreme;
         }
         
+        /**
+         * Get the extreme coordinate of the block
+         * @param extreme: "top", "bottom", "left", "right"
+         */
         int getExtreme(const string extreme) const {
             if (extreme == "top") {
                return getExtremeHelper(false, false);
@@ -116,35 +128,76 @@ class Block : public Controller {
             }
         }
 
-        void rotate(Rotation dir) {
-            int pivotY = getExtreme("bottom");
-            int pivotX = getExtreme("right");
+        // Rotate block around pivot point (bottom-right corner)
+        void rotate(Rotation dir, int pivotX, int pivotY) {
             if (dir == Rotation::Left) {
-                // Implement left rotation logic
                 for (auto &pos : positions) {
                     int dx = pos.getX() - pivotX;
                     int dy = pos.getY() - pivotY;
-                    pos.x = pivotX - dx;
+
+                    // 90 degree rotation matrix
+                    int oldDx = dx;
+                    dx = -dy;
+                    dy = oldDx;
+
+                    pos.x = pivotX + dx;
                     pos.y = pivotY + dy;
                 }
             } else if (dir == Rotation::Right) {
-                // Implement right rotation logic
                 for (auto &pos : positions) {
                     int dx = pos.getX() - pivotX;
                     int dy = pos.getY() - pivotY;
+
+                    // -90 degree rotation matrix
+                    int oldDx = dx;
+                    dx = dy;
+                    dy = -oldDx;
+
                     pos.x = pivotX + dy;
-                    pos.y = pivotY - dx;
+                    pos.y = pivotY + dx;
                 }
             }
         }
 
+        /**
+         * Wrapper for rotate function to adjust positions after rotation
+         */
+        void rotateWrapper(Rotation dir) {
+            
+            Pos oldBottomRight = {getExtreme("right"), getExtreme("bottom")};
+
+            int pivotY = getExtreme("bottom");
+            int pivotX = getExtreme("left");
+            rotate(dir, pivotX, pivotY);
+            // use the old bottom-right to adjust positions
+            
+            int xOffset = oldBottomRight.getX() - pivotX;
+            int yOffset = oldBottomRight.getY() - pivotY;
+
+            for (auto &pos : positions) {
+                pos.x += xOffset;
+                pos.y += yOffset;
+            }
+
+            notifyBoard();
+        }
+
     public:
+        Block(Board *b, int t, vector<Pos> p, Rotation r = Rotation::Up) :
+            Controller{b}, type{t}, rotation{r}, positions{p} {}
+
         virtual void MoveLeft() = 0;
         virtual void MoveRight() = 0;
         virtual std::vector<Pos> getPositions() const = 0;
         virtual void RotateCounterClockWise() = 0;
         virtual void RotateClockWise() = 0;
-        virtual Rotation getRotation() const = 0;
+
+        virtual Rotation getRotation() const {
+            return rotation;
+        }
+        virtual char getType() const {
+            return type;
+        }
 
         virtual ~Block() = default;
 };
@@ -152,6 +205,8 @@ class Block : public Controller {
 class I : public Block {
 
     public:
+        I(Board *b) : Block{b, 'I', {{0, 0}, {0, 1}, {0, 2}, {0, 3}}} {}
+
         void MoveLeft() override {
             if (getExtreme("left") <= 0) return;
             for (auto &pos : positions) {
@@ -169,16 +224,15 @@ class I : public Block {
         std::vector<Pos> getPositions() const override {
             return positions;
         }
+
+        // does not check if out of bounds
         void RotateCounterClockWise() override {
-            // Implement rotation logic
+            rotateWrapper(Rotation::Left);
             notifyBoard();
         }
         void RotateClockWise() override {
-            // Implement rotation logic
+            rotateWrapper(Rotation::Right);
             notifyBoard();
-        }
-        Rotation getRotation() const override {
-            return rotation;
         }
 };
 
