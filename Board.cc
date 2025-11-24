@@ -36,7 +36,7 @@ class Board : public Observer
   unique_ptr<Block> nextBlock;
   bool isBlind;
   
-  unique_ptr<Block> Board::getBlock() {
+  unique_ptr<Block> getBlock() {
     return unique_ptr<Block>( level->spawnBlock() );
   }
 
@@ -163,11 +163,11 @@ public:
 
 
 
-  Block* Board::getCurrentBlock() {
+  Block* getCurrentBlock() {
     return currentBlock.get();
   }
 
-  Block* Board::getNextBlock() {
+  Block* getNextBlock() {
     return nextBlock.get();
   }
 
