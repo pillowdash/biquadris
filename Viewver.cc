@@ -13,7 +13,7 @@ public:
   Viewver(int w = 11, int h = 18);
   /**
    * Draws the current state of the game.
-   * @param board The board instance to draw.
+   * @param game The game instance to draw.
   */
-  void drawGrid(const Board &board) const;
+  void drawGrid(const Game &game) const;
 };

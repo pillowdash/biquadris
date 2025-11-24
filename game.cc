@@ -27,4 +27,10 @@ export class Game {
          * @return The Level pointer of the specified player.
         */
         Level *getLevel(int player);
+        /** 
+         * Gets the board of the specified player.
+         * @param player The player number (1 or 2).
+         * @return The Board pointer of the specified player.
+        */
+        Board *getBoard(int player);
 };
