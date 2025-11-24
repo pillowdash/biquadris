@@ -62,12 +62,16 @@ struct Pos {
 
     int getX() const { return x; }
     int getY() const { return y; }
+    bool operator==(const Pos &other) const {
+        return x == other.x && y == other.y;
+    }
 };
 
 class Board : public Observer {
     
 };
 
+// TODO: use map for command parsing
 class Controller : public Subject {
     protected: 
         Board *board;
@@ -84,11 +88,19 @@ enum class Rotation {
     Down
 };
 
+// TODO: decorator heaviness is too complicated, so use enum / map instead?
+enum class Heaviness {
+    VeryHeavy = 2,
+    Heavy = 1,
+    Normal = 0
+};
+
 class Block : public Controller {
     protected:
         std::vector<Pos> positions;
         Rotation rotation;
         char type;
+        Heaviness heaviness;
 
         /**
          * helper function to get extreme coordinate
@@ -163,16 +175,27 @@ class Block : public Controller {
          * Wrapper for rotate function to adjust positions after rotation
          */
         void rotateWrapper(Rotation dir) {
+
+            // FIXME: this rotation adjustment system still has issues: could move in unexpected ways
             
+            // find where the bottom right is before rotation
             Pos oldBottomRight = {getExtreme("right"), getExtreme("bottom")};
+            Pos *newBottomRight = nullptr;
+            // make a pointer to that bottom-right position so that we can find it after rotation
+            for (auto &pos : positions) {
+                if (pos == oldBottomRight) {
+                    newBottomRight = &pos;
+                    break;
+                }
+            }
 
             int pivotY = getExtreme("bottom");
             int pivotX = getExtreme("left");
             rotate(dir, pivotX, pivotY);
             // use the old bottom-right to adjust positions
             
-            int xOffset = oldBottomRight.getX() - pivotX;
-            int yOffset = oldBottomRight.getY() - pivotY;
+            int xOffset = newBottomRight->getX() - pivotX;
+            int yOffset = newBottomRight->getY() - pivotY;
 
             for (auto &pos : positions) {
                 pos.x += xOffset;
@@ -182,15 +205,28 @@ class Block : public Controller {
             notifyBoard();
         }
 
+        // apply heaviness effect after movement
+        void checkHeaviness() {
+            for (int i = 0; i < static_cast<int>(heaviness); ++i) {
+                for (auto &pos : positions) {
+                    pos.y += 1;
+                }
+            }
+        }
+
     public:
-        Block(Board *b, int t, vector<Pos> p, Rotation r = Rotation::Up) :
-            Controller{b}, type{t}, rotation{r}, positions{p} {}
+        // do not use this ctor directly
+        Block(Board *b, vector<Pos> p, char t = ' ', Rotation r = Rotation::Up, Heaviness h = Heaviness::Normal) :
+            Controller{b}, type{t}, rotation{r}, positions{p}, heaviness{h} {}
 
         virtual void MoveLeft() = 0;
         virtual void MoveRight() = 0;
-        virtual std::vector<Pos> getPositions() const = 0;
         virtual void RotateCounterClockWise() = 0;
         virtual void RotateClockWise() = 0;
+
+        virtual std::vector<Pos> getPositions() const {
+            return positions;
+        }
 
         virtual Rotation getRotation() const {
             return rotation;
@@ -205,9 +241,10 @@ class Block : public Controller {
 class I : public Block {
 
     public:
-        I(Board *b) : Block{b, 'I', {{0, 0}, {0, 1}, {0, 2}, {0, 3}}} {}
+        I(Board *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {0, 3}}, 'I'} {}
 
         void MoveLeft() override {
+            checkHeaviness();
             if (getExtreme("left") <= 0) return;
             for (auto &pos : positions) {
                 pos.x -= 1;
@@ -215,34 +252,76 @@ class I : public Block {
             notifyBoard();
         }
         void MoveRight() override {
+            checkHeaviness();
             if (getExtreme("right") >= BOARD_WIDTH - 1) return;
             for (auto &pos : positions) {
                 pos.x += 1;
             }
             notifyBoard();
         }
-        std::vector<Pos> getPositions() const override {
-            return positions;
-        }
 
-        // does not check if out of bounds
+        // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
+            checkHeaviness();
             rotateWrapper(Rotation::Left);
             notifyBoard();
         }
         void RotateClockWise() override {
+            checkHeaviness();
             rotateWrapper(Rotation::Right);
             notifyBoard();
         }
 };
 
 
+// might be too complicated to use decorator pattern here
 class Decorator : public Block {
     protected:
         std::unique_ptr<Block> next;
 
     public:
+        Decorator(Board *b, std::unique_ptr<Block> n)
+            : Block{b, n->getPositions(), n->getType(), n->getRotation()}, next{std::move(n)} {}
+
         virtual ~Decorator() {}
+};
+
+class Heavy : public Decorator {
+    void MoveDown() {
+        for (auto &pos : positions) {
+            pos.y += 1;
+        }
+    }
+
+    public:
+        Heavy(Board *b, std::unique_ptr<Block> n)
+            : Decorator{b, std::move(n)} {}
+
+        void MoveLeft() override {
+            MoveDown();
+            next->MoveLeft();
+        }
+        void MoveRight() override {
+            MoveDown();
+            next->MoveRight();
+        }
+        std::vector<Pos> getPositions() const override {
+            return next->getPositions();
+        }
+        void RotateCounterClockWise() override {
+            MoveDown();
+            next->RotateCounterClockWise();
+        }
+        void RotateClockWise() override {
+            MoveDown();
+            next->RotateClockWise();
+        }
+        Rotation getRotation() {
+            return next->getRotation();
+        }
+        char getType() {
+            return next->getType();
+        }
 };
 
 // it could be that two lines would clear at different spots
