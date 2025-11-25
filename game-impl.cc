@@ -15,9 +15,9 @@ void Game::run(const Viewver &viewver) {
 
         // Render the game state
         viewver.drawGrid(*player1, *player2, level1, level2);
-        player1->getInput();
+        player1->notify();
         viewver.drawGrid(*player1, *player2, level1, level2);
-        player2->getInput();
+        player2->notify();
     }
 }
 
