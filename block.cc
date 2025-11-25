@@ -36,7 +36,21 @@ export class Controller : public Subject {
         Observer *board;
 
         void getInput() {
-
+            string cmd;
+            cin >> cmd;
+            if (cmd == "left") {
+                // Move Left
+                MoveLeft();
+            } else if (cmd == "right") {
+                // Move Right
+                MoveRight();
+            } else if (cmd == "rotatecw") {
+                // Rotate Clockwise
+                RotateClockWise();
+            } else if (cmd == "rotateccw") {
+                // Rotate CounterClockwise
+                RotateCounterClockWise();
+            }
         }
     public:
         Controller(Observer *b) : Subject{b}, board{b} {}
@@ -180,8 +194,8 @@ export class Block : public Controller {
         Block(Observer *b, vector<Pos> p, char t = ' ', Rotation r = Rotation::Up, Heaviness h = Heaviness::Normal) :
             Controller{b}, type{t}, rotation{r}, positions{p}, heaviness{h} {}
 
-        virtual void MoveLeft() = 0;
-        virtual void MoveRight() = 0;
+        // virtual void MoveLeft() = 0;
+        // virtual void MoveRight() = 0;
         virtual void RotateCounterClockWise() = 0;
         virtual void RotateClockWise() = 0;
 
@@ -203,15 +217,7 @@ export class Block : public Controller {
             }
         }
 
-        virtual ~Block() = default;
-};
-
-export class I : public Block {
-
-    public:
-        I(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {0, 3}}, 'I'} {}
-
-        void MoveLeft() override {
+        virtual void MoveLeft() override {
             checkHeaviness();
             if (getExtreme("left") <= 0) return;
             for (auto &pos : positions) {
@@ -219,7 +225,7 @@ export class I : public Block {
             }
             notifyBoard();
         }
-        void MoveRight() override {
+        virtual void MoveRight() override {
             checkHeaviness();
             if (getExtreme("right") >= BOARD_WIDTH - 1) return;
             for (auto &pos : positions) {
@@ -227,6 +233,104 @@ export class I : public Block {
             }
             notifyBoard();
         }
+
+        virtual ~Block() = default;
+};
+
+export class J : public Block {
+
+    public:
+        J(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {1, 2}}, 'J'} {}
+
+        // TODO: fix rotation going out of bounds
+        void RotateCounterClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Left);
+            notifyBoard();
+        }
+        void RotateClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Right);
+            notifyBoard();
+        }
+};
+
+export class L : public Block {
+
+    public:
+        L(Observer *b) : Block{b, {{1, 0}, {1, 1}, {1, 2}, {0, 2}}, 'L'} {}
+
+        // TODO: fix rotation going out of bounds
+        void RotateCounterClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Left);
+            notifyBoard();
+        }
+        void RotateClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Right);
+            notifyBoard();
+        }
+};
+
+export class O : public Block {
+
+    public:
+        O(Observer *b) : Block{b, {{0, 0}, {0, 1}, {1, 0}, {1, 1}}, 'O'} {}
+
+        // TODO: fix rotation going out of bounds
+        void RotateCounterClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Left);
+            notifyBoard();
+        }
+        void RotateClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Right);
+            notifyBoard();
+        }
+};
+
+export class T : public Block {
+
+    public:
+        T(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {1, 1}}, 'T'} {}
+
+        // TODO: fix rotation going out of bounds
+        void RotateCounterClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Left);
+            notifyBoard();
+        }
+        void RotateClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Right);
+            notifyBoard();
+        }
+};
+
+export class S : public Block {
+
+    public:
+        S(Observer *b) : Block{b, {{0, 1}, {1, 1}, {1, 0}, {2, 0}}, 'S'} {}
+
+        // TODO: fix rotation going out of bounds
+        void RotateCounterClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Left);
+            notifyBoard();
+        }
+        void RotateClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Right);
+            notifyBoard();
+        }
+};
+
+export class Z : public Block {
+
+    public:
+        Z(Observer *b) : Block{b, {{0, 0}, {0, 1}, {1, 1}, {2, 1}}, 'Z'} {}
 
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
