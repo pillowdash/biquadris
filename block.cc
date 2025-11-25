@@ -35,6 +35,7 @@ export class Controller : public Subject {
     protected: 
         Observer *board;
 
+    public:
         void getInput() {
             string cmd;
             cin >> cmd;
@@ -52,7 +53,6 @@ export class Controller : public Subject {
                 RotateCounterClockWise();
             }
         }
-    public:
         virtual void MoveLeft() = 0;
         virtual void MoveRight() = 0;
         virtual void RotateCounterClockWise() = 0;  
