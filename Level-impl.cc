@@ -13,7 +13,7 @@ Level0::Level0() {
 }
 
 char Level0::spawnBlock() {
-    std::vector<char> blockTypes = {'J'};
+    std::vector<char> blockTypes = {'I'};
     int randIndex = rand() % blockTypes.size();
     char blockType = blockTypes[randIndex];
     return blockType;

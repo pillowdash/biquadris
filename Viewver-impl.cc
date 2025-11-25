@@ -17,12 +17,12 @@ bool isBlockPosition(const std::vector<Pos> &positions, Pos position) {
 }
 
 void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, const Level* level_p2) const {
-    std::cout << "Leve          " << level_p1->getLevelNum() << "        "
-              << "Level         " << level_p2->getLevelNum() << std::endl;
-    std::cout << "Score         " << p1.getScore() << "        "
-              << "Score         " << p2.getScore() << std::endl;
-    std::cout << "---------------" << "        "
-              << "---------------" << std::endl;
+    std::cout << "Level     " << level_p1->getLevelNum() << "        "
+              << "Level     " << level_p2->getLevelNum() << std::endl;
+    std::cout << "Score     " << p1.getScore() << "        "
+              << "Score     " << p2.getScore() << std::endl;
+    std::cout << "-----------" << "        "
+              << "-----------" << std::endl;
     
 
     Block *currentBlock1 = p1.getCurrentBlock();
@@ -53,8 +53,8 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
         }
         std::cout << std::endl;
     }
-    std::cout << "---------------" << "        "
-              << "---------------" << std::endl;
+    std::cout << "-----------" << "        "
+              << "-----------" << std::endl;
     std::cout << "Next: " << nextBlock1->getType() << "                "
               << "Next: " << nextBlock2->getType() << std::endl;
 }

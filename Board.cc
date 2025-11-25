@@ -139,7 +139,7 @@ public:
   void notify() override
   {
     // Hummmmmm......
-    if (currentBlock->isDropped)
+    if (currentBlock->getIsDropped())
     {
       placeBlock(currentBlock.get());
       currentBlock = nextBlock;
@@ -215,7 +215,6 @@ public:
         }
       }
     }
-    notify();
     return !illegalPlacement;
   }
 
