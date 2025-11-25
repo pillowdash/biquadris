@@ -183,10 +183,10 @@ export class Block : public Controller {
             // int xOffset = newBottomRight->getX() - pivotX;
             // int yOffset = newBottomRight->getY() - pivotY;
 
-            // for (auto &pos : positions) {
-            //     pos.x += xOffset;
-            //     pos.y += yOffset;
-            // }
+            for (auto &pos : positions) {
+                pos.x -= 2;
+                pos.y -= 2;
+            }
 
             notifyBoard();
         }
