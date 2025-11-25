@@ -200,21 +200,27 @@ public:
       {
         continue;
       }
+      if (y < 3) {
+        illegalPlacement = true;
+        break;
+      }
 
       (*cells[y])[x].setColor(b->getType());
+      
     }
     clearLines();
-    for (int r = 0; r < 3; ++r)
-    {
-      for (int col = 0; col < width; ++col)
-      {
-        if ((*cells[r])[col].getColor() != ' ')
-        {
-          illegalPlacement = true;
-          break;
-        }
-      }
-    }
+    // for (int r = 0; r < 3; ++r)
+    // {
+    //   for (int col = 0; col < width; ++col)
+    //   {
+    //     if ((*cells[r])[col].getColor() != ' ')
+    //     {
+    //       illegalPlacement = true;
+    //       break;
+    //     }
+    //   }
+    // }
+    
     notify();
     return !illegalPlacement;
   }
