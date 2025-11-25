@@ -34,23 +34,27 @@ export struct Pos {
 export class Controller : public Subject {
     protected: 
         Observer *board;
+        bool isDropped = false;
 
     public:
         void getInput() {
             string cmd;
             cin >> cmd;
-            if (cmd == "left") {
+            if (cmd == "l") {
                 // Move Left
                 MoveLeft();
-            } else if (cmd == "right") {
+            } else if (cmd == "r") {
                 // Move Right
                 MoveRight();
-            } else if (cmd == "rotatecw") {
+            } else if (cmd == "rcw") {
                 // Rotate Clockwise
                 RotateClockWise();
-            } else if (cmd == "rotateccw") {
+            } else if (cmd == "rccw") {
                 // Rotate CounterClockwise
                 RotateCounterClockWise();
+            } else if (cmd == "d") {
+                isDropped = true;
+                notifyBoard();
             }
         }
         virtual void MoveLeft() = 0;

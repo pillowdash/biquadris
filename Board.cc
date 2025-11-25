@@ -101,6 +101,11 @@ public:
   
   void notify() override {
     // Hummmmmm......
+    if (currentBlock->isDropped) {
+        placeBlock(currentBlock.get());
+        currentBlock = nextBlock;
+        nextBlock = getBlock();
+    }
   }
 
   Cell *getCellAt(int x, int y) const {
