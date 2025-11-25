@@ -41,7 +41,7 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
                 std::cout << cell->getColor();
             }
         }
-        std::cout << "            ";
+        std::cout << "        ";
         for (int c = 0; c < width; ++c) {
             Pos p{c, r};
             if (isBlockPosition(currentBlock2->getPositions(), p)) {

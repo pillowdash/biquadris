@@ -19,8 +19,9 @@ export class Level {
 };
 
 export class Level0 : public Level {
+    char selectedBlock;
     public:
-        Level0();
+        Level0(char sb = 0) : selectedBlock{sb} { levelNum = 0; }
         char spawnBlock() override;
 };
 
