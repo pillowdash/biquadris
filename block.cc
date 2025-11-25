@@ -9,6 +9,9 @@ import <iostream>;
 import <memory>;
 import <vector>;
 import <string>;
+import Observer;
+
+class Board;
 
 using namespace std;
 
@@ -30,13 +33,13 @@ export struct Pos {
 // TODO: use map for command parsing
 export class Controller : public Subject {
     protected: 
-        Board *board;
+        Observer *board;
 
         void getInput() {
 
         }
     public:
-        Controller(Board *b) : Subject{b}, board{b} {}
+        Controller(Observer *b) : Subject{b}, board{b} {}
 };
 
 enum class Rotation {
@@ -174,7 +177,7 @@ export class Block : public Controller {
 
     public:
         // do not use this ctor directly
-        Block(Board *b, vector<Pos> p, char t = ' ', Rotation r = Rotation::Up, Heaviness h = Heaviness::Normal) :
+        Block(Observer *b, vector<Pos> p, char t = ' ', Rotation r = Rotation::Up, Heaviness h = Heaviness::Normal) :
             Controller{b}, type{t}, rotation{r}, positions{p}, heaviness{h} {}
 
         virtual void MoveLeft() = 0;
@@ -206,7 +209,7 @@ export class Block : public Controller {
 export class I : public Block {
 
     public:
-        I(Board *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {0, 3}}, 'I'} {}
+        I(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {0, 3}}, 'I'} {}
 
         void MoveLeft() override {
             checkHeaviness();

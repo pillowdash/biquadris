@@ -1,7 +1,11 @@
 module Game;
 import <stdexcept>;
+import <iostream>;
+import <string>;
 import Board;
 import Viewver;
+
+// g++20 observer.o block.o Level.o Level-impl.o board.o viewver.o viewver-impl.o game.o game-impl.o main.o -o test 
 
 void Game::run(const Viewver &viewver) {
     // Implementation of the game loop
@@ -10,7 +14,7 @@ void Game::run(const Viewver &viewver) {
         // Game logic here
 
         // Render the game state
-        viewver.drawGrid(*this);
+        viewver.drawGrid(*player1, *player2, level1, level2);
         std::cin >> command;
     }
 }

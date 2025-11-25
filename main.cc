@@ -1,13 +1,14 @@
 import Game;
 import Board;
+import Level;
 import Viewver;
 import <iostream>;
 import <vector>;
 import <string>;
-import Level;
+
 
 int main() {
-    Level level0 = Level0();
+    Level0 level0 = Level0();
     Board board1 = Board(&level0);
     Board board2 = Board(&level0);
     Game game = Game(&board1, &board2, &level0, &level0);

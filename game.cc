@@ -4,7 +4,6 @@ import Level;
 import Viewver;
 import <stdexcept>;
 
-
 export class Game {
     Board *player1;
     Board *player2;

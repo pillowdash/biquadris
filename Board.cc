@@ -1,5 +1,10 @@
-#include <memory>
-#include <vector>
+export module Board;
+import <memory>;
+import <vector>;
+import Block;
+import <iostream>;
+import Observer;
+import Level;
 using namespace std;
 // class Level
 // {
@@ -7,7 +12,8 @@ using namespace std;
 // class Block
 // {
 // };
-class Cell
+
+export class Cell
 {
   const int x;
   const int y;
@@ -24,7 +30,7 @@ public:
   void incrementTick() { ++tick; }
 };
 
-class Board : public Observer
+export class Board : public Observer
 {
   vector<unique_ptr<vector<Cell>>> cells;
   Level *level;
@@ -32,16 +38,11 @@ class Board : public Observer
   int height;
   int score;
   int highScore;
-  unique_ptr<Block> currentBlock;
-  unique_ptr<Block> nextBlock;
+  shared_ptr<Block> currentBlock;
+  shared_ptr<Block> nextBlock;
   bool isBlind;
-  
-  unique_ptr<Block> getBlock() {
-    return unique_ptr<Block>( level->spawnBlock() );
-  }
 
-  void clearLines()
-  {
+  void clearLines() {
     for (int row = 0; row < height; ++row)
     {
 
@@ -76,7 +77,6 @@ class Board : public Observer
 
 public:
 
-
   explicit Board(Level *lvl) : level{lvl}, width{11}, height{18},
                       score{0}, highScore{0}, isBlind{false}
   {
@@ -95,12 +95,15 @@ public:
     nextBlock = getBlock();
   }
 
-
+  std::shared_ptr<Block> getBlock() {
+    return std::make_shared<I>(this); // Fixed: use make_shared
+  }
+  
   void notify() override {
+    // Hummmmmm......
   }
 
-  Cell *getCellAt(int x, int y)
-  {
+  Cell *getCellAt(int x, int y) const {
     return &(*cells[y])[x];
   }
 
@@ -161,14 +164,16 @@ public:
     return !illegalPlacement;
   }
 
+  int getScore() const {
+    return score;
+  }
 
-
-  Block* getCurrentBlock() {
+  Block* getCurrentBlock() const {
     return currentBlock.get();
   }
 
-  Block* getNextBlock() {
+  Block* getNextBlock() const {
     return nextBlock.get();
   }
 
-}
+};

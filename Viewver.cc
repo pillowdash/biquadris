@@ -3,7 +3,8 @@ import <iostream>;
 import <string>;
 import <vector>;
 import Board;
-
+import Level;
+import Block;
 
 export class Viewver {
   // Graphics will be implemented using X11 in the future
@@ -15,5 +16,5 @@ public:
    * Draws the current state of the game.
    * @param game The game instance to draw.
   */
-  void drawGrid(const Game &game) const;
+  void drawGrid(const Board &p1, const Board &p2, const Level* level_p1, const Level* level_p2) const;
 };
