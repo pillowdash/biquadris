@@ -165,27 +165,27 @@ export class Block : public Controller {
             // FIXME: this rotation adjustment system still has issues: could move in unexpected ways
             
             // find where the bottom right is before rotation
-            Pos oldBottomRight = {getExtreme("right"), getExtreme("bottom")};
-            Pos *newBottomRight = nullptr;
-            // make a pointer to that bottom-right position so that we can find it after rotation
-            for (auto &pos : positions) {
-                if (pos == oldBottomRight) {
-                    newBottomRight = &pos;
-                    break;
-                }
-            }
+            // Pos oldBottomRight = {getExtreme("right"), getExtreme("bottom")};
+            // Pos *newBottomRight = nullptr;
+            // // make a pointer to that bottom-right position so that we can find it after rotation
+            // for (auto &pos : positions) {
+            //     if (pos == oldBottomRight) {
+            //         newBottomRight = &pos;
+            //         break;
+            //     }
+            // }
 
-            int pivotY = getExtreme("bottom");
+            int pivotY = getExtreme("top");
             int pivotX = getExtreme("left");
             rotate(dir, pivotX, pivotY);
             // use the old bottom-right to adjust positions
             
-            int xOffset = newBottomRight->getX() - pivotX;
-            int yOffset = newBottomRight->getY() - pivotY;
+            // int xOffset = newBottomRight->getX() - pivotX;
+            // int yOffset = newBottomRight->getY() - pivotY;
 
             for (auto &pos : positions) {
-                pos.x += xOffset;
-                pos.y += yOffset;
+                pos.x -= 2;
+                pos.y -= 2;
             }
 
             notifyBoard();
