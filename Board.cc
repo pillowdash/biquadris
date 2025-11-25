@@ -216,7 +216,7 @@ public:
         }
       }
     }
-    return 
+    return;
   }
 
   int getScore() const
