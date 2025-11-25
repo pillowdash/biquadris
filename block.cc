@@ -263,10 +263,10 @@ export class I : public Block {
         }
 };
 
-export class J : public Block {
+export class L : public Block {
 
     public:
-        J(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {1, 2}}, 'J'} {}
+        L(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {1, 2}}, 'L'} {}
 
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
@@ -281,10 +281,10 @@ export class J : public Block {
         }
 };
 
-export class L : public Block {
+export class J : public Block {
 
     public:
-        L(Observer *b) : Block{b, {{1, 0}, {1, 1}, {1, 2}, {0, 2}}, 'L'} {}
+        J(Observer *b) : Block{b, {{1, 0}, {1, 1}, {1, 2}, {0, 2}}, 'J'} {}
 
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
