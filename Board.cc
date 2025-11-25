@@ -41,6 +41,7 @@ export class Board : public Observer
   shared_ptr<Block> currentBlock;
   shared_ptr<Block> nextBlock;
   bool isBlind;
+  bool isTerminate;
 
   void clearLines()
   {
@@ -77,7 +78,7 @@ export class Board : public Observer
 
 public:
   explicit Board(Level *lvl) : level{lvl}, width{11}, height{18},
-                               score{0}, highScore{0}, isBlind{false}
+                               score{0}, highScore{0}, isBlind{false}, isTerminate{false}
   {
     for (int r = 0; r < height; ++r)
     {
@@ -161,8 +162,9 @@ public:
 
   bool getBlind() const { return isBlind; }
   void setBlind(bool b) { isBlind = b; }
+  bool getTerminate() const {return isTerminate;}
 
-  bool placeBlock(Block *b)
+  void placeBlock(Block *b)
   {
     vector<Pos> basePos = b->getPositions();
     int drop = 0;
@@ -190,7 +192,6 @@ public:
       ++drop;
     }
 
-    bool illegalPlacement = false;
     for (const auto &p : basePos)
     {
       int x = p.x;
@@ -210,12 +211,12 @@ public:
       {
         if ((*cells[r])[col].getColor() != ' ')
         {
-          illegalPlacement = true;
+          isTerminate = true;
           break;
         }
       }
     }
-    return !illegalPlacement;
+    return 
   }
 
   int getScore() const
