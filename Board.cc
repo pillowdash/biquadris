@@ -13,7 +13,8 @@ using namespace std;
 // {
 // };
 
-export class Cell {
+export class Cell
+{
   const int x;
   const int y;
   char color;
@@ -41,8 +42,10 @@ export class Board : public Observer
   shared_ptr<Block> nextBlock;
   bool isBlind;
 
-  void clearLines() {
-    for (int row = 0; row < height; ++row) {
+  void clearLines()
+  {
+    for (int row = 0; row < height; ++row)
+    {
 
       bool full = true;
       for (int col = 0; col < width; ++col)
@@ -72,11 +75,9 @@ export class Board : public Observer
     }
   }
 
-
 public:
-
   explicit Board(Level *lvl) : level{lvl}, width{11}, height{18},
-                      score{0}, highScore{0}, isBlind{false}
+                               score{0}, highScore{0}, isBlind{false}
   {
     for (int r = 0; r < height; ++r)
     {
@@ -93,45 +94,66 @@ public:
     nextBlock = getBlock();
   }
 
-  void getInput() {
+  void getInput()
+  {
     currentBlock->getInput();
   }
 
-  std::shared_ptr<Block> getBlock() {
+  std::shared_ptr<Block> getBlock()
+  {
     char blockType = level->spawnBlock();
-    if (blockType == 'I') {
-        return std::make_shared<I>(this);
-    } else if (blockType == 'J') {
-        return std::make_shared<J>(this);
-    } else if (blockType == 'L') {
-        return std::make_shared<L>(this);
-    } else if (blockType == 'O') {
-        return std::make_shared<O>(this);
-    } else if (blockType == 'S') {
-        return std::make_shared<S>(this);
-    } else if (blockType == 'T') {
-        return std::make_shared<T>(this);
-    } else if (blockType == 'Z') {
-        return std::make_shared<Z>(this);
-    } else {
-        throw std::invalid_argument("Invalid block type");
+    if (blockType == 'I')
+    {
+      return std::make_shared<I>(this);
+    }
+    else if (blockType == 'J')
+    {
+      return std::make_shared<J>(this);
+    }
+    else if (blockType == 'L')
+    {
+      return std::make_shared<L>(this);
+    }
+    else if (blockType == 'O')
+    {
+      return std::make_shared<O>(this);
+    }
+    else if (blockType == 'S')
+    {
+      return std::make_shared<S>(this);
+    }
+    else if (blockType == 'T')
+    {
+      return std::make_shared<T>(this);
+    }
+    else if (blockType == 'Z')
+    {
+      return std::make_shared<Z>(this);
+    }
+    else
+    {
+      throw std::invalid_argument("Invalid block type");
     }
   }
 
-  void notify() override {
+  void notify() override
+  {
     // Hummmmmm......
-    if (currentBlock->isDropped) {
-        placeBlock(currentBlock.get());
-        currentBlock = nextBlock;
-        nextBlock = getBlock();
+    if (currentBlock->isDropped)
+    {
+      placeBlock(currentBlock.get());
+      currentBlock = nextBlock;
+      nextBlock = getBlock();
     }
   }
 
-  Cell *getCellAt(int x, int y) const {
+  Cell *getCellAt(int x, int y) const
+  {
     return &(*cells[y])[x];
   }
 
-  void incScore(int inc) {
+  void incScore(int inc)
+  {
     score += inc;
     if (score > highScore)
       highScore = score;
@@ -169,35 +191,46 @@ public:
     }
 
     bool illegalPlacement = false;
-    for (const auto &p : basePos) {
-        int x = p.x;
-        int y = p.y + drop;
+    for (const auto &p : basePos)
+    {
+      int x = p.x;
+      int y = p.y + drop;
 
-        if (x < 0 || x >= width || y < 0 || y >= height) {
-            continue;
-        }
+      if (x < 0 || x >= width || y < 0 || y >= height)
+      {
+        continue;
+      }
 
-        if (y < 3) {
-            illegalPlacement = true;
-        }
-
-        (*cells[y])[x].setColor(b->getType());
+      (*cells[y])[x].setColor(b->getType());
     }
     clearLines();
+    for (int r = 0; r < 3; ++r)
+    {
+      for (int col = 0; col < width; ++col)
+      {
+        if ((*cells[r])[col].getColor() != ' ')
+        {
+          illegalPlacement = true;
+          break;
+        }
+      }
+    }
     notify();
     return !illegalPlacement;
   }
 
-  int getScore() const {
+  int getScore() const
+  {
     return score;
   }
 
-  Block* getCurrentBlock() const {
+  Block *getCurrentBlock() const
+  {
     return currentBlock.get();
   }
 
-  Block* getNextBlock() const {
+  Block *getNextBlock() const
+  {
     return nextBlock.get();
   }
-
 };
