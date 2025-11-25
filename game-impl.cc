@@ -15,7 +15,9 @@ void Game::run(const Viewver &viewver) {
 
         // Render the game state
         viewver.drawGrid(*player1, *player2, level1, level2);
-        std::cin >> command;
+        player1->getInput();
+        viewver.drawGrid(*player1, *player2, level1, level2);
+        player2->getInput();
     }
 }
 

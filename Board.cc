@@ -13,8 +13,7 @@ using namespace std;
 // {
 // };
 
-export class Cell
-{
+export class Cell {
   const int x;
   const int y;
   char color;
@@ -43,8 +42,7 @@ export class Board : public Observer
   bool isBlind;
 
   void clearLines() {
-    for (int row = 0; row < height; ++row)
-    {
+    for (int row = 0; row < height; ++row) {
 
       bool full = true;
       for (int col = 0; col < width; ++col)
@@ -95,10 +93,31 @@ public:
     nextBlock = getBlock();
   }
 
-  std::shared_ptr<Block> getBlock() {
-    return std::make_shared<I>(this); // Fixed: use make_shared
+  void getInput() {
+    currentBlock->getInput();
   }
-  
+
+  std::shared_ptr<Block> getBlock() {
+    char blockType = level->spawnBlock();
+    if (blockType == 'I') {
+        return std::make_shared<I>(this);
+    } else if (blockType == 'J') {
+        return std::make_shared<J>(this);
+    } else if (blockType == 'L') {
+        return std::make_shared<L>(this);
+    } else if (blockType == 'O') {
+        return std::make_shared<O>(this);
+    } else if (blockType == 'S') {
+        return std::make_shared<S>(this);
+    } else if (blockType == 'T') {
+        return std::make_shared<T>(this);
+    } else if (blockType == 'Z') {
+        return std::make_shared<Z>(this);
+    } else {
+        throw std::invalid_argument("Invalid block type");
+    }
+  }
+
   void notify() override {
     // Hummmmmm......
   }

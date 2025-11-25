@@ -28,6 +28,9 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
     Block *currentBlock1 = p1.getCurrentBlock();
     Block *currentBlock2 = p2.getCurrentBlock();
 
+    Block *nextBlock1 = p1.getNextBlock();
+    Block *nextBlock2 = p2.getNextBlock();
+
     for (int r = 0; r < height; ++r) {
         for (int c = 0; c < width; ++c) {
             Pos p{c, r};
@@ -52,7 +55,7 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
     }
     std::cout << "---------------" << "        "
               << "---------------" << std::endl;
-    std::cout << "Next: " << "S" << "                "
-              << "Next: " << "S" << std::endl;
+    std::cout << "Next: " << nextBlock1->getType() << "                "
+              << "Next: " << nextBlock2->getType() << std::endl;
 }
 
