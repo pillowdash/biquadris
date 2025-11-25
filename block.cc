@@ -241,6 +241,24 @@ export class Block : public Controller {
         virtual ~Block() = default;
 };
 
+export class I : public Block {
+
+    public:
+        I(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {0, 3}}, 'I'} {}
+
+        // TODO: fix rotation going out of bounds
+        void RotateCounterClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Left);
+            notifyBoard();
+        }
+        void RotateClockWise() override {
+            checkHeaviness();
+            rotateWrapper(Rotation::Right);
+            notifyBoard();
+        }
+};
+
 export class J : public Block {
 
     public:
