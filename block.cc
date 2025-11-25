@@ -175,8 +175,8 @@ export class Block : public Controller {
             //     }
             // }
 
-            // int pivotY = getExtreme("bottom");
-            // int pivotX = getExtreme("left");
+            int pivotY = getExtreme("bottom");
+            int pivotX = getExtreme("left");
             rotate(dir, pivotX, pivotY);
             // use the old bottom-right to adjust positions
             
