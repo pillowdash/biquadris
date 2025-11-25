@@ -143,8 +143,8 @@ export class Block : public Controller {
                 }
             } else if (dir == Rotation::Right) {
                 for (auto &pos : positions) {
-                    int dx = -(pos.getX() - pivotX);
-                    int dy = -(pos.getY() - pivotY);
+                    int dx = pos.getX() - pivotX;
+                    int dy = pos.getY() - pivotY;
 
                     // -90 degree rotation matrix
                     int oldDx = dx;
@@ -175,7 +175,7 @@ export class Block : public Controller {
             //     }
             // }
 
-            int pivotY = getExtreme("bottom");
+            int pivotY = getExtreme("top");
             int pivotX = getExtreme("left");
             rotate(dir, pivotX, pivotY);
             // use the old bottom-right to adjust positions
