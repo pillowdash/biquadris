@@ -53,6 +53,10 @@ export class Controller : public Subject {
             }
         }
     public:
+        virtual void MoveLeft() = 0;
+        virtual void MoveRight() = 0;
+        virtual void RotateCounterClockWise() = 0;  
+        virtual void RotateClockWise() = 0;
         Controller(Observer *b) : Subject{b}, board{b} {}
 };
 
