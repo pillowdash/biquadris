@@ -4,16 +4,17 @@ import <vector>;
 import <string>;
 import <memory>;
 import <cstdlib>;
+import <iostream>;
 import Block;
 
 Level::Level() : levelNum{0} {} 
 
-Level0::Level0() {
-    levelNum = 0;
-}
 
 char Level0::spawnBlock() {
-    std::vector<char> blockTypes = {'J'};
+    if (selectedBlock != 0) {
+        return selectedBlock;
+    }
+    std::vector<char> blockTypes = {'I', 'J', 'L', 'O', 'S', 'T', 'Z'};
     int randIndex = rand() % blockTypes.size();
     char blockType = blockTypes[randIndex];
     return blockType;
@@ -25,7 +26,7 @@ Level1::Level1() {
 }
 
 char Level1::spawnBlock() {
-    std::vector<char> blockTypes = {'I', 'J', 'L', 'O', 'S', 'T', 'Z'};
+    std::vector<char> blockTypes = {'I', 'I', 'J', 'J', 'L', 'L', 'O', 'O', 'T', 'T', 'S', 'Z'};
     int randIndex = rand() % blockTypes.size();
     char blockType = blockTypes[randIndex];
     return blockType;
@@ -45,6 +46,7 @@ char Level2::spawnBlock() {
 }
 
 Level3::Level3() {
+    isheavy = true;
     levelNum = 3;
 }
 
