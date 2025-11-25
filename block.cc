@@ -143,8 +143,8 @@ export class Block : public Controller {
                 }
             } else if (dir == Rotation::Right) {
                 for (auto &pos : positions) {
-                    int dx = pos.getX() - pivotX;
-                    int dy = pos.getY() - pivotY;
+                    int dx = -(pos.getX() - pivotX);
+                    int dy = -(pos.getY() - pivotY);
 
                     // -90 degree rotation matrix
                     int oldDx = dx;
