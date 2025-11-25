@@ -220,8 +220,6 @@ public:
     //     }
     //   }
     // }
-    
-    notify();
     return !illegalPlacement;
   }
 
