@@ -37,6 +37,9 @@ export class Controller : public Subject {
         bool isDropped = false;
 
     public:
+        void getIsDropped() const {
+            return isDropped;
+        }
         void getInput() {
             string cmd;
             cin >> cmd;
