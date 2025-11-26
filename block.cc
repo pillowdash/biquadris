@@ -259,37 +259,37 @@ export class I : public Block {
 export class L : public Block {
 
     public:
-        L(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {1, 2}}, 'L'} {}
+        L(Observer *b) : Block{b, {{0, 1}, {0, 2}, {0, 3}, {1, 4}}, 'L'} {}
 };
 
 export class J : public Block {
 
     public:
-        J(Observer *b) : Block{b, {{1, 0}, {1, 1}, {1, 2}, {0, 2}}, 'J'} {}
+        J(Observer *b) : Block{b, {{1, 1}, {1, 2}, {1, 3}, {0, 3}}, 'J'} {}
 };
 
 export class O : public Block {
 
     public:
-        O(Observer *b) : Block{b, {{0, 0}, {0, 1}, {1, 0}, {1, 1}}, 'O'} {}
+        O(Observer *b) : Block{b, {{0, 2}, {0, 3}, {1, 2}, {1, 3}}, 'O'} {}
 };
 
 export class T : public Block {
 
     public:
-        T(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {1, 1}}, 'T'} {}
+        T(Observer *b) : Block{b, {{0, 1}, {0, 2}, {0, 3}, {1, 2}}, 'T'} {}
 };
 
 export class S : public Block {
 
     public:
-        S(Observer *b) : Block{b, {{0, 1}, {1, 1}, {1, 0}, {2, 0}}, 'S'} {}
+        S(Observer *b) : Block{b, {{0, 3}, {1, 3}, {1, 2}, {2, 2}}, 'S'} {}
 };
 
 export class Z : public Block {
 
     public:
-        Z(Observer *b) : Block{b, {{0, 0}, {0, 1}, {1, 1}, {2, 1}}, 'Z'} {}
+        Z(Observer *b) : Block{b, {{0, 2}, {1, 2}, {1, 3}, {2, 3}}, 'Z'} {}
 };
 
 
