@@ -10,7 +10,7 @@ import Viewver;
 void Game::run(const Viewver &viewver) {
     // Implementation of the game loop
     std::string command;
-    while (true) {
+    while (player1->getTerminate() == false && player2->getTerminate() == false) {
         // Game logic here
 
         // Render the game state
@@ -18,6 +18,12 @@ void Game::run(const Viewver &viewver) {
         player1->getInput();
         viewver.drawGrid(*player1, *player2, level1, level2);
         player2->getInput();
+    }
+    std::cout << "Game Over!" << std::endl;
+    if (player1->getTerminate()) {
+        std::cout << "Player 2 Wins!" << std::endl;
+    } else if (player2->getTerminate()) {
+        std::cout << "Player 1 Wins!" << std::endl;
     }
 }
 
