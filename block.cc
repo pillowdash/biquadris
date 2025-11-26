@@ -23,49 +23,59 @@ export struct Pos {
     int x;
     int y;
 
-    int getX() const { return x; }
-    int getY() const { return y; }
-    bool operator==(const Pos &other) const {
-        return x == other.x && y == other.y;
-    }
+    int getX() const;
+    int getY() const;
+    bool operator==(const Pos &other) const;
 };
+
+int Pos::getX() const { return x; }
+int Pos::getY() const { return y; }
+
+bool Pos::operator==(const Pos &other) const {
+    return x == other.x && y == other.y;
+}
 
 // TODO: use map for command parsing
 export class Controller : public Subject {
     protected: 
         Observer *board;
-        bool isDropped = false;
+        bool isDropped;
 
     public:
-        bool getIsDropped() const {
-            return isDropped;
-        }
-        string getInput() {
-            string cmd;
-            cin >> cmd;
-            if (cmd == "l") {
-                MoveLeft();
-            } else if (cmd == "r") {
-                // Move Right
-                MoveRight();
-            } else if (cmd == "rcw") {
-                // Rotate Clockwise
-                RotateClockWise();
-            } else if (cmd == "rccw") {
-                // Rotate CounterClockwise
-                RotateCounterClockWise();
-            } else if (cmd == "d") {
-                isDropped = true;
-                notifyBoard();
-            }
-            return cmd;
-        }
+        bool getIsDropped() const;
+        string getInput();
+
         virtual void MoveLeft() = 0;
         virtual void MoveRight() = 0;
         virtual void RotateCounterClockWise() = 0;  
         virtual void RotateClockWise() = 0;
-        Controller(Observer *b) : Subject{b}, board{b} {}
+        Controller(Observer *b) : Subject{b}, board{b}, isDropped{false} {}
 };
+
+bool Controller::getIsDropped() const {
+    return isDropped;
+}
+
+string Controller::getInput() {
+    string cmd;
+    cin >> cmd;
+    if (cmd == "l") {
+        MoveLeft();
+    } else if (cmd == "r") {
+        // Move Right
+        MoveRight();
+    } else if (cmd == "rcw") {
+        // Rotate Clockwise
+        RotateClockWise();
+    } else if (cmd == "rccw") {
+        // Rotate CounterClockwise
+        RotateCounterClockWise();
+    } else if (cmd == "d") {
+        isDropped = true;
+        notifyBoard();
+    }
+    return cmd;
+}
 
 enum class Rotation {
     Left,
@@ -93,95 +103,19 @@ export class Block : public Controller {
          * @param isX: true for x-coordinate, false for y-coordinate
          * @param findMax: true to find max, false to find min
          */
-        int getExtremeHelper(bool isX, bool findMax) const {
-            int extreme = isX ? positions[0].getX() : positions[0].getY();
-            for (auto &pos : positions) {
-                int value = isX ? pos.getX() : pos.getY();
-                if (findMax) {
-                    if (value > extreme) {
-                        extreme = value;
-                    }
-                } else {
-                    if (value < extreme) {
-                        extreme = value;
-                    }
-                }
-            }
-            return extreme;
-        }
+        int getExtremeHelper(bool isX, bool findMax) const;
         
         /**
          * Get the extreme coordinate of the block
          * @param extreme: "top", "bottom", "left", "right"
          */
-        int getExtreme(const string extreme) const {
-            if (extreme == "top") {
-               return getExtremeHelper(false, false);
-            } else if (extreme == "bottom") {
-               return getExtremeHelper(false, true);
-            } else if (extreme == "left") {
-               return getExtremeHelper(true, false);
-            } else if (extreme == "right") {
-               return getExtremeHelper(true, true);
-            }
-        }
+        int getExtreme(const string extreme) const;
 
         // Rotate block around pivot point (bottom-right corner)
-        void rotate(Rotation dir) {
-            vector<Pos> originalPositions = positions;
-            Pos pivot = {getExtreme("left"), getExtreme("bottom")};
-
-            for (auto &pos : positions) {
-                int localX = pos.x - pivot.x;
-                int localY = pos.y - pivot.y;
-
-                int rx = 0;
-                int ry = 0;
-
-                if (dir == Rotation::Left) {
-                    // -90 degree rotation matrix
-                    rx = localY;
-                    ry = -localX;
-                } else if (dir == Rotation::Right) {
-                    // 90 degree rotation matrix
-                    rx = -localY;
-                    ry = localX;
-                } else {
-                    //throw std::invalid_argument("Invalid rotation direction");
-                }
-
-                pos.x = pivot.x + rx;
-                pos.y = pivot.y + ry;
-            }
-
-            Pos newPivot = {getExtreme("left"), getExtreme("bottom")};
-
-            int dx = pivot.x - newPivot.x;
-            int dy = pivot.y - newPivot.y;
-
-            for (auto &pos : positions) {
-                pos.x += dx;
-                pos.y += dy; 
-            }
-
-            int newRight = getExtreme("right");
-            if (newRight >= BOARD_WIDTH) { 
-                // to prevent going out of right boundary
-                positions = originalPositions;
-            }
-
-            notifyBoard();
-        }
+        void rotate(Rotation dir);
 
         // apply heaviness effect after movement
-        void checkHeaviness() {
-            for (int i = 0; i < static_cast<int>(heaviness); ++i) {
-                for (auto &pos : positions) {
-                    pos.y += 1;
-                }
-            }
-            notifyBoard();
-        }
+        void checkHeaviness();
 
     public:
         // do not use this ctor directly
@@ -203,6 +137,90 @@ export class Block : public Controller {
 
         virtual ~Block() = default;
 };
+
+int Block::getExtremeHelper(bool isX, bool findMax) const {
+    int extreme = isX ? positions[0].getX() : positions[0].getY();
+    for (auto &pos : positions) {
+        int value = isX ? pos.getX() : pos.getY();
+        if (findMax) {
+            if (value > extreme) {
+                extreme = value;
+            }
+        } else {
+            if (value < extreme) {
+                extreme = value;
+            }
+        }
+    }
+    return extreme;
+}
+
+int Block::getExtreme(const string extreme) const {
+    if (extreme == "top") {
+        return getExtremeHelper(false, false);
+    } else if (extreme == "bottom") {
+        return getExtremeHelper(false, true);
+    } else if (extreme == "left") {
+        return getExtremeHelper(true, false);
+    } else if (extreme == "right") {
+        return getExtremeHelper(true, true);
+    }
+}
+
+void Block::rotate(Rotation dir) {
+    vector<Pos> originalPositions = positions;
+    Pos pivot = {getExtreme("left"), getExtreme("bottom")};
+
+    for (auto &pos : positions) {
+        int localX = pos.x - pivot.x;
+        int localY = pos.y - pivot.y;
+
+        int rx = 0;
+        int ry = 0;
+
+        if (dir == Rotation::Left) {
+            // -90 degree rotation matrix
+            rx = localY;
+            ry = -localX;
+        } else if (dir == Rotation::Right) {
+            // 90 degree rotation matrix
+            rx = -localY;
+            ry = localX;
+        } else {
+            //throw std::invalid_argument("Invalid rotation direction");
+        }
+
+        pos.x = pivot.x + rx;
+        pos.y = pivot.y + ry;
+    }
+
+    Pos newPivot = {getExtreme("left"), getExtreme("bottom")};
+
+    int dx = pivot.x - newPivot.x;
+    int dy = pivot.y - newPivot.y;
+
+    for (auto &pos : positions) {
+        pos.x += dx;
+        pos.y += dy; 
+    }
+
+    int newRight = getExtreme("right");
+    if (newRight >= BOARD_WIDTH) { 
+        // to prevent going out of right boundary
+        positions = originalPositions;
+    }
+
+    notifyBoard();
+}
+
+void Block::checkHeaviness() {
+    for (int i = 0; i < static_cast<int>(heaviness); ++i) {
+        for (auto &pos : positions) {
+            pos.y += 1;
+        }
+    }
+    notifyBoard();
+}
 
 void Block::RotateCounterClockWise() {
     checkHeaviness();
