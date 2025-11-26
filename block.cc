@@ -127,37 +127,38 @@ export class Block : public Controller {
         }
 
         // Rotate block around pivot point (bottom-right corner)
-        void rotate(Rotation dir, int pivotX, int pivotY) {
-            if (dir == Rotation::Left) {
-                for (auto &pos : positions) {
-                    int dx = pos.getX() - pivotX;
-                    int dy = pos.getY() - pivotY;
+        void rotate(Rotation dir) {
+            Pos pivot = {getExtreme("left"), getExtreme("bottom")};
 
+            for (auto &pos : positions) {
+                int localX = pos.x - pivot.x;
+                int localY = pos.y - pivot.y;
+
+                int rx, ry;
+
+                if (dir == Rotation::Left) {
+                    // -90 degree rotation matrix
+                    rx = localY;
+                    ry = -localX;
+                } else if (dir == Rotation::Right) {
                     // 90 degree rotation matrix
-                    int oldDx = dx;
-                    dx = -dy;
-                    dy = oldDx;
-
-                    pos.x = pivotX + dx;
-                    pos.y = pivotY + dy;
+                    rx = -localY;
+                    ry = localX;
                 }
-            } else if (dir == Rotation::Right) {
-            //     for (auto &pos : positions) {
-            //         int dx = pos.getX() - pivotX;
-            //         int dy = pos.getY() - pivotY;
 
-            //         // -90 degree rotation matrix
-            //         int oldDx = dx;
-            //         dx = dy;
-            //         dy = -oldDx;
+                pos.x = pivot.x + rx;
+                pos.y = pivot.y + ry;
+            }
 
-            //         pos.x = pivotX + dy;
-            //         pos.y = pivotY + dx;
-            //     }
-                rotate(Rotation::Left, pivotX, pivotY);
-                rotate(Rotation::Left, pivotX, pivotY);
-                rotate(Rotation::Left, pivotX, pivotY);
-             }
+            Pos newPivot = {getExtreme("left"), getExtreme("bottom")};
+
+            int dx = pivot.x - newPivot.x;
+            int dy = pivot.y - newPivot.y;
+
+            for (auto &pos : positions) {
+                pos.x += dx;
+                pos.y += dy; 
+            }
         }
 
         /**
@@ -177,10 +178,7 @@ export class Block : public Controller {
             //         break;
             //     }
             // }
-
-            int pivotY = getExtreme("top");
-            int pivotX = getExtreme("left");
-            rotate(dir, pivotX, pivotY);
+            rotate(dir);
             // use the old bottom-right to adjust positions
             
             // int xOffset = newBottomRight->getX() - pivotX;
