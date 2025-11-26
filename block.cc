@@ -180,10 +180,17 @@ export class Block : public Controller {
         Block(Observer *b, vector<Pos> p, char t = ' ', Rotation r = Rotation::Up, Heaviness h = Heaviness::Normal) :
             Controller{b}, type{t}, rotation{r}, positions{p}, heaviness{h} {}
 
-        // virtual void MoveLeft() = 0;
-        // virtual void MoveRight() = 0;
-        virtual void RotateCounterClockWise() = 0;
-        virtual void RotateClockWise() = 0;
+        void RotateCounterClockWise() {
+            checkHeaviness();
+            rotate(Rotation::Right);
+            notifyBoard();
+        }
+        
+        void RotateClockWise() {
+            checkHeaviness();
+            rotate(Rotation::Left);
+            notifyBoard();
+        }
 
         virtual std::vector<Pos> getPositions() const {
             return positions;
@@ -227,126 +234,42 @@ export class I : public Block {
 
     public:
         I(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {0, 3}}, 'I'} {}
-
-        // TODO: fix rotation going out of bounds
-        void RotateCounterClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Right);
-            notifyBoard();
-        }
-        void RotateClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Left);
-            notifyBoard();
-        }
 };
 
 export class L : public Block {
 
     public:
         L(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {1, 2}}, 'L'} {}
-
-        // TODO: fix rotation going out of bounds
-        void RotateCounterClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Right);
-            notifyBoard();
-        }
-        void RotateClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Left);
-            notifyBoard();
-        }
 };
 
 export class J : public Block {
 
     public:
         J(Observer *b) : Block{b, {{1, 0}, {1, 1}, {1, 2}, {0, 2}}, 'J'} {}
-
-        // TODO: fix rotation going out of bounds
-        void RotateCounterClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Right);
-            notifyBoard();
-        }
-        void RotateClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Left);
-            notifyBoard();
-        }
 };
 
 export class O : public Block {
 
     public:
         O(Observer *b) : Block{b, {{0, 0}, {0, 1}, {1, 0}, {1, 1}}, 'O'} {}
-
-        // TODO: fix rotation going out of bounds
-        void RotateCounterClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Right);
-            notifyBoard();
-        }
-        void RotateClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Left);
-            notifyBoard();
-        }
 };
 
 export class T : public Block {
 
     public:
         T(Observer *b) : Block{b, {{0, 0}, {0, 1}, {0, 2}, {1, 1}}, 'T'} {}
-
-        // TODO: fix rotation going out of bounds
-        void RotateCounterClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Right);
-            notifyBoard();
-        }
-        void RotateClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Left);
-            notifyBoard();
-        }
 };
 
 export class S : public Block {
 
     public:
         S(Observer *b) : Block{b, {{0, 1}, {1, 1}, {1, 0}, {2, 0}}, 'S'} {}
-
-        // TODO: fix rotation going out of bounds
-        void RotateCounterClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Right);
-            notifyBoard();
-        }
-        void RotateClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Left);
-            notifyBoard();
-        }
 };
 
 export class Z : public Block {
 
     public:
         Z(Observer *b) : Block{b, {{0, 0}, {0, 1}, {1, 1}, {2, 1}}, 'Z'} {}
-
-        // TODO: fix rotation going out of bounds
-        void RotateCounterClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Right);
-            notifyBoard();
-        }
-        void RotateClockWise() override {
-            checkHeaviness();
-            rotate(Rotation::Left);
-            notifyBoard();
-        }
 };
 
 
