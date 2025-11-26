@@ -259,12 +259,12 @@ export class I : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotateWrapper(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotateWrapper(Rotation::Left);
             notifyBoard();
         }
 };
@@ -277,12 +277,12 @@ export class L : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotateWrapper(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotateWrapper(Rotation::Left);
             notifyBoard();
         }
 };
@@ -295,12 +295,12 @@ export class J : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotateWrapper(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotateWrapper(Rotation::Left);
             notifyBoard();
         }
 };
@@ -313,12 +313,12 @@ export class O : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotateWrapper(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotateWrapper(Rotation::Left);
             notifyBoard();
         }
 };
@@ -331,12 +331,12 @@ export class T : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotateWrapper(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotateWrapper(Rotation::Left);
             notifyBoard();
         }
 };
@@ -349,12 +349,12 @@ export class S : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotateWrapper(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotateWrapper(Rotation::Left);
             notifyBoard();
         }
 };
@@ -367,12 +367,12 @@ export class Z : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotateWrapper(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotateWrapper(Rotation::Left);
             notifyBoard();
         }
 };
