@@ -134,7 +134,8 @@ export class Block : public Controller {
                 int localX = pos.x - pivot.x;
                 int localY = pos.y - pivot.y;
 
-                int rx, ry;
+                int rx = 0;
+                int ry = 0;
 
                 if (dir == Rotation::Left) {
                     // -90 degree rotation matrix
@@ -144,6 +145,8 @@ export class Block : public Controller {
                     // 90 degree rotation matrix
                     rx = -localY;
                     ry = localX;
+                } else {
+                    //throw std::invalid_argument("Invalid rotation direction");
                 }
 
                 pos.x = pivot.x + rx;
