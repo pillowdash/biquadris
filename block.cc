@@ -142,19 +142,22 @@ export class Block : public Controller {
                     pos.y = pivotY + dy;
                 }
             } else if (dir == Rotation::Right) {
-                for (auto &pos : positions) {
-                    int dx = pos.getX() - pivotX;
-                    int dy = pos.getY() - pivotY;
+            //     for (auto &pos : positions) {
+            //         int dx = pos.getX() - pivotX;
+            //         int dy = pos.getY() - pivotY;
 
-                    // -90 degree rotation matrix
-                    int oldDx = dx;
-                    dx = dy;
-                    dy = -oldDx;
+            //         // -90 degree rotation matrix
+            //         int oldDx = dx;
+            //         dx = dy;
+            //         dy = -oldDx;
 
-                    pos.x = pivotX + dy;
-                    pos.y = pivotY + dx;
-                }
-            }
+            //         pos.x = pivotX + dy;
+            //         pos.y = pivotY + dx;
+            //     }
+            // }
+            rotate(Rotation::Left);
+            rotate(Rotation::Left);
+            rotate(Rotation::Left);
         }
 
         /**
@@ -184,8 +187,8 @@ export class Block : public Controller {
             // int yOffset = newBottomRight->getY() - pivotY;
 
             for (auto &pos : positions) {
-                pos.x += 2;
-                pos.y += 2;
+                pos.x += 1;
+                pos.y += 1;
             }
 
             notifyBoard();
