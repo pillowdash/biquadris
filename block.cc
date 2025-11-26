@@ -165,7 +165,8 @@ export class Block : public Controller {
             }
 
             int newRight = getExtreme("right");
-            if (newRight >= BOARD_WIDTH - 1) {
+            if (newRight >= BOARD_WIDTH) { 
+                // to prevent going out of right boundary
                 positions = originalPositions;
             }
 
