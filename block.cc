@@ -40,11 +40,10 @@ export class Controller : public Subject {
         bool getIsDropped() const {
             return isDropped;
         }
-        void getInput() {
+        string getInput() {
             string cmd;
             cin >> cmd;
             if (cmd == "l") {
-                // Move Left
                 MoveLeft();
             } else if (cmd == "r") {
                 // Move Right
@@ -59,6 +58,7 @@ export class Controller : public Subject {
                 isDropped = true;
                 notifyBoard();
             }
+            return cmd;
         }
         virtual void MoveLeft() = 0;
         virtual void MoveRight() = 0;

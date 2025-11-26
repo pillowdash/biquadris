@@ -9,15 +9,16 @@ import Viewver;
 
 void Game::run(const Viewver &viewver) {
     // Implementation of the game loop
-    std::string command;
     while (player1->getTerminate() == false && player2->getTerminate() == false) {
         // Game logic here
 
         // Render the game state
         viewver.drawGrid(*player1, *player2, level1, level2);
-        player1->getInput();
+        std::string cmd1 = player1->getInput();
         viewver.drawGrid(*player1, *player2, level1, level2);
-        player2->getInput();
+        std::string cmd2 = player2->getInput();
+
+        // have trie of commands to handle all commands that are non left, right, rccw
     }
     std::cout << "Game Over!" << std::endl;
     if (player1->getTerminate()) {
