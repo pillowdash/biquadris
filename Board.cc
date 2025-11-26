@@ -146,7 +146,7 @@ public:
       currentBlock = nextBlock;
       nextBlock = getBlock();
     }
-    
+
     bool temp = true;
     vector<Pos> positions = currentBlock->getPositions();
     for (auto &p : positions) {
@@ -156,7 +156,7 @@ public:
       }
     }
     if (!temp) {
-      for (auto &p : currentBlock->getPositions()) {}
+      for (auto &p : currentBlock->getPositions()) {
         p.y -= 1;
       }
       placeBlock(currentBlock.get());
