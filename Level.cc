@@ -16,6 +16,9 @@ export class Level {
         virtual int getLevelNum() const {
             return levelNum;
         }
+        virtual bool getIsHeavy() const {
+            return isheavy;
+        }
 };
 
 export class Level0 : public Level {

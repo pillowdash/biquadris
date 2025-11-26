@@ -95,46 +95,53 @@ public:
     nextBlock = getBlock();
   }
 
-  void getInput()
+  std::string getInput()
   {
-    currentBlock->getInput();
+    return currentBlock->getInput();
   }
 
   std::shared_ptr<Block> getBlock()
   {
+    bool heavy = level->getIsHeavy();
     char blockType = level->spawnBlock();
+    std::shared_ptr<Block> block;
     if (blockType == 'I')
     {
-      return std::make_shared<I>(this);
+      block = std::make_shared<I>(this);
     }
     else if (blockType == 'J')
     {
-      return std::make_shared<J>(this);
+      block = std::make_shared<J>(this);
     }
     else if (blockType == 'L')
     {
-      return std::make_shared<L>(this);
+      block = std::make_shared<L>(this);
     }
     else if (blockType == 'O')
     {
-      return std::make_shared<O>(this);
+      block = std::make_shared<O>(this);
     }
     else if (blockType == 'S')
     {
-      return std::make_shared<S>(this);
+      block = std::make_shared<S>(this);
     }
     else if (blockType == 'T')
     {
-      return std::make_shared<T>(this);
+      block = std::make_shared<T>(this);
     }
     else if (blockType == 'Z')
     {
-      return std::make_shared<Z>(this);
+      block = std::make_shared<Z>(this);
     }
     else
     {
       throw std::invalid_argument("Invalid block type");
     }
+    if (heavy)
+    {
+      block->IncHeaviness();
+    }
+    return block;
   }
 
   void notify() override
