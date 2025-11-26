@@ -155,9 +155,9 @@ export class Block : public Controller {
             //         pos.y = pivotY + dx;
             //     }
             // }
-            rotate(Rotation::Left);
-            rotate(Rotation::Left);
-            rotate(Rotation::Left);
+            rotate(Rotation::Left, pivotX, pivotY);
+            rotate(Rotation::Left, pivotX, pivotY);
+            rotate(Rotation::Left, pivotX, pivotY);
         }
 
         /**
