@@ -128,6 +128,7 @@ export class Block : public Controller {
 
         // Rotate block around pivot point (bottom-right corner)
         void rotate(Rotation dir) {
+            vector<Pos> originalPositions = positions;
             Pos pivot = {getExtreme("left"), getExtreme("bottom")};
 
             for (auto &pos : positions) {
@@ -163,6 +164,11 @@ export class Block : public Controller {
                 pos.y += dy; 
             }
 
+            int newRight = getExtreme("right");
+            if (newRight >= BOARD_WIDTH - 1) {
+                positions = originalPositions;
+            }
+
             notifyBoard();
         }
 
@@ -185,7 +191,7 @@ export class Block : public Controller {
             rotate(Rotation::Right);
             notifyBoard();
         }
-        
+
         void RotateClockWise() {
             checkHeaviness();
             rotate(Rotation::Left);
