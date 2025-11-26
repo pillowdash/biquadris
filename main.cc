@@ -12,10 +12,10 @@ int main(int argc, char **argv) {
     if (argc == 2) {
         selectedBlock = *argv[1];
     }
-    Level0 level0 = Level0(selectedBlock);
-    Board board1 = Board(&level0);
-    Board board2 = Board(&level0);
-    Game game = Game(&board1, &board2, &level0, &level0);
+    Level3 level3 = Level3();
+    Board board1 = Board(&level3);
+    Board board2 = Board(&level3);
+    Game game = Game(&board1, &board2, &level3, &level3);
     Viewver viewver = Viewver(11, 18);
 
     try {

@@ -278,7 +278,7 @@ export class I : public Block {
 export class L : public Block {
 
     public:
-        L(Observer *b) : Block{b, {{0, 1}, {0, 2}, {0, 3}, {1, 4}}, 'L'} {}
+        L(Observer *b) : Block{b, {{0, 1}, {0, 2}, {0, 3}, {1, 3}}, 'L'} {}
 };
 
 export class J : public Block {
