@@ -185,57 +185,70 @@ export class Block : public Controller {
     public:
         // do not use this ctor directly
         Block(Observer *b, vector<Pos> p, char t = ' ', Rotation r = Rotation::Up, Heaviness h = Heaviness::Normal) :
-            Controller{b}, type{t}, rotation{r}, positions{p}, heaviness{h} {}
+            Controller{b}, positions{p}, type{t}, rotation{r}, heaviness{h} {}
 
-        void RotateCounterClockWise() {
-            checkHeaviness();
-            rotate(Rotation::Right);
-            notifyBoard();
-        }
+        void RotateCounterClockWise();
 
-        void RotateClockWise() {
-            checkHeaviness();
-            rotate(Rotation::Left);
-            notifyBoard();
-        }
+        void RotateClockWise();
 
-        virtual std::vector<Pos> getPositions() const {
-            return positions;
-        }
+        virtual std::vector<Pos> getPositions() const;
 
-        virtual Rotation getRotation() const {
-            return rotation;
-        }
-        virtual char getType() const {
-            return type;
-        }
-        virtual void IncHeaviness() {
-            if (heaviness == Heaviness::Normal) {
-                heaviness = Heaviness::Heavy;
-            } else if (heaviness == Heaviness::Heavy) {
-                heaviness = Heaviness::VeryHeavy;
-            }
-        }
+        virtual Rotation getRotation() const;
+        virtual char getType() const;
+        virtual void IncHeaviness();
 
-        virtual void MoveLeft() override {
-            checkHeaviness();
-            if (getExtreme("left") <= 0) return;
-            for (auto &pos : positions) {
-                pos.x -= 1;
-            }
-            notifyBoard();
-        }
-        virtual void MoveRight() override {
-            checkHeaviness();
-            if (getExtreme("right") >= BOARD_WIDTH - 1) return;
-            for (auto &pos : positions) {
-                pos.x += 1;
-            }
-            notifyBoard();
-        }
+        virtual void MoveLeft() override;
+        virtual void MoveRight() override;
 
         virtual ~Block() = default;
 };
+
+void Block::RotateCounterClockWise() {
+    checkHeaviness();
+    rotate(Rotation::Right);
+    notifyBoard();
+}
+
+void Block::RotateClockWise() {
+    checkHeaviness();
+    rotate(Rotation::Left);
+    notifyBoard();
+}
+
+std::vector<Pos> Block::getPositions() const {
+    return positions;
+}
+
+Rotation Block::getRotation() const {
+    return rotation;
+}
+char Block::getType() const {
+    return type;
+}
+void Block::IncHeaviness() {
+    if (heaviness == Heaviness::Normal) {
+        heaviness = Heaviness::Heavy;
+    } else if (heaviness == Heaviness::Heavy) {
+        heaviness = Heaviness::VeryHeavy;
+    }
+}
+
+void Block::MoveLeft() {
+    checkHeaviness();
+    if (getExtreme("left") <= 0) return;
+    for (auto &pos : positions) {
+        pos.x -= 1;
+    }
+    notifyBoard();
+}
+void Block::MoveRight() {
+    checkHeaviness();
+    if (getExtreme("right") >= BOARD_WIDTH - 1) return;
+    for (auto &pos : positions) {
+        pos.x += 1;
+    }
+    notifyBoard();
+}
 
 export class I : public Block {
 
