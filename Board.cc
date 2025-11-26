@@ -146,6 +146,23 @@ public:
       currentBlock = nextBlock;
       nextBlock = getBlock();
     }
+    
+    bool temp = true;
+    vector<Pos> positions = currentBlock->getPositions();
+    for (auto &p : positions) {
+      if (getCellAt(p.x, p.y)->getColor() != ' ') {
+        temp = false;
+        break;
+      }
+    }
+    if (!temp) {
+      for (auto &p : currentBlock->getPositions()) {}
+        p.y -= 1;
+      }
+      placeBlock(currentBlock.get());
+      currentBlock = nextBlock;
+      nextBlock = getBlock();
+    }
   }
 
   Cell *getCellAt(int x, int y) const

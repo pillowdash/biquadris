@@ -180,6 +180,7 @@ export class Block : public Controller {
                     pos.y += 1;
                 }
             }
+            notifyBoard();
         }
 
     public:
