@@ -159,35 +159,6 @@ export class Block : public Controller {
                 pos.x += dx;
                 pos.y += dy; 
             }
-        }
-
-        /**
-         * Wrapper for rotate function to adjust positions after rotation
-         */
-        void rotateWrapper(Rotation dir) {
-
-            // FIXME: this rotation adjustment system still has issues: could move in unexpected ways
-            
-            // find where the bottom right is before rotation
-            // Pos oldBottomRight = {getExtreme("right"), getExtreme("bottom")};
-            // Pos *newBottomRight = nullptr;
-            // // make a pointer to that bottom-right position so that we can find it after rotation
-            // for (auto &pos : positions) {
-            //     if (pos == oldBottomRight) {
-            //         newBottomRight = &pos;
-            //         break;
-            //     }
-            // }
-            rotate(dir);
-            // use the old bottom-right to adjust positions
-            
-            // int xOffset = newBottomRight->getX() - pivotX;
-            // int yOffset = newBottomRight->getY() - pivotY;
-
-            for (auto &pos : positions) {
-                pos.x += 1;
-                pos.y += 1;
-            }
 
             notifyBoard();
         }
@@ -257,12 +228,12 @@ export class I : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotate(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotate(Rotation::Left);
             notifyBoard();
         }
 };
@@ -275,12 +246,12 @@ export class L : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotate(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotate(Rotation::Left);
             notifyBoard();
         }
 };
@@ -293,12 +264,12 @@ export class J : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotate(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotate(Rotation::Left);
             notifyBoard();
         }
 };
@@ -311,12 +282,12 @@ export class O : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotate(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotate(Rotation::Left);
             notifyBoard();
         }
 };
@@ -329,12 +300,12 @@ export class T : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotate(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotate(Rotation::Left);
             notifyBoard();
         }
 };
@@ -347,12 +318,12 @@ export class S : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotate(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotate(Rotation::Left);
             notifyBoard();
         }
 };
@@ -365,12 +336,12 @@ export class Z : public Block {
         // TODO: fix rotation going out of bounds
         void RotateCounterClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Right);
+            rotate(Rotation::Right);
             notifyBoard();
         }
         void RotateClockWise() override {
             checkHeaviness();
-            rotateWrapper(Rotation::Left);
+            rotate(Rotation::Left);
             notifyBoard();
         }
 };
