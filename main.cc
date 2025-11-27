@@ -16,11 +16,11 @@ int main(int argc, char **argv) {
     if (argc == 2) {
         selectedBlock = *argv[1];
     }
-    Level0 level0_p1 = Level0(BLOCK_SEQUENCE_FILE_P1);
-    Level0 level0_p2 = Level0(BLOCK_SEQUENCE_FILE_P2);
-    Board board1 = Board(&level0_p1);
-    Board board2 = Board(&level0_p2);
-    Game game = Game(&board1, &board2, &level0_p1, &level0_p2);
+    LevelManager levelManagerP1(0);
+    LevelManager levelManagerP2(0);
+    Board board1 = Board(levelManagerP1->getCurrentLevel());
+    Board board2 = Board(levelManagerP2->getCurrentLevel());
+    Game game = Game(&board1, &board2, &levelManagerP1, &levelManagerP2);
     Viewver viewver = Viewver(BOARD_WIDTH, BOARD_HEIGHT);
 
     try {
