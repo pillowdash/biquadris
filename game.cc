@@ -15,7 +15,7 @@ export class Game {
          * Runs the game loop, might throw exceptions.
          * @param viewver The Viewver instance to render the game.
         */
-        void run(const Viewver &viewver);
+        void run(Viewver &viewver);
         /** 
          * Resets the game to initial state.
         */
