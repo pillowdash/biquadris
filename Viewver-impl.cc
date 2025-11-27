@@ -1,11 +1,12 @@
 module Viewver;
+import xwindow;
 import Board;
 import Block;
 import <iostream>;
 import <string>;
 import <vector>;
 
-Viewver::Viewver(int w, int h) : width{w}, height{h} {}
+Viewver::Viewver(int w, int h) : width{w}, height{h}, window{500, 500} {};
 
 bool isBlockPosition(const std::vector<Pos> &positions, Pos position) {
     for (const auto &pos : positions) {
@@ -53,9 +54,102 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
         }
         std::cout << std::endl;
     }
+
     std::cout << "-----------" << "        "
               << "-----------" << std::endl;
     std::cout << "Next: " << nextBlock1->getType() << "                "
               << "Next: " << nextBlock2->getType() << std::endl;
 }
+void Viewver::drawGraphics(const Board &p1, const Board &p2,
+                           const Level* level_p1, const Level* level_p2) {
 
+    // --- TEXT HEADER ---
+    window.drawString(20, 20,  "Level: " + std::to_string(level_p1->getLevelNum()));
+    window.drawString(220, 20, "Level: " + std::to_string(level_p2->getLevelNum()));
+
+    window.drawString(20, 40,  "Score: " + std::to_string(p1.getScore()));
+    window.drawString(220, 40, "Score: " + std::to_string(p2.getScore()));
+
+    const int cellSize = 20;
+    const int p1OffsetX = 20;
+    const int p1OffsetY = 70;
+
+    const int p2OffsetX = 220;
+    const int p2OffsetY = 70;
+
+    Block *currentBlock1 = p1.getCurrentBlock();
+    Block *currentBlock2 = p2.getCurrentBlock();
+
+    auto pos1 = currentBlock1->getPositions();
+    auto pos2 = currentBlock2->getPositions();
+
+    // --- PLAYER 1 GRAPHICS ---
+    for (int r = 0; r < height; ++r) {
+        for (int c = 0; c < width; ++c) {
+
+            int drawColour = Xwindow::White;
+
+            Pos p{c, r};
+
+            if (isBlockPosition(pos1, p)) {
+                // falling block overrides board
+                drawColour = Xwindow::Cyan;  
+            } else {
+                char colour = p1.getCellAt(c, r)->getColor();
+
+                if (colour == 'I') drawColour = Xwindow::Cyan;
+                else if (colour == 'J') drawColour = Xwindow::Blue;
+                else if (colour == 'L') drawColour = Xwindow::Orange;
+                else if (colour == 'S') drawColour = Xwindow::Green;
+                else if (colour == 'Z') drawColour = Xwindow::Red;
+                else if (colour == 'T') drawColour = Xwindow::Magenta;
+                else if (colour == 'O') drawColour = Xwindow::Yellow;
+            }
+
+            window.fillRectangle(
+                p1OffsetX + c * cellSize,
+                p1OffsetY + r * cellSize,
+                cellSize, cellSize,
+                drawColour
+            );
+        }
+    }
+
+    // --- PLAYER 2 GRAPHICS ---
+    for (int r = 0; r < height; ++r) {
+        for (int c = 0; c < width; ++c) {
+
+            int drawColour = Xwindow::White;
+
+            Pos p{c, r};
+
+            if (isBlockPosition(pos2, p)) {
+                drawColour = Xwindow::Cyan;
+            } else {
+                char colour = p2.getCellAt(c, r)->getColor();
+
+                if (colour == 'I') drawColour = Xwindow::Cyan;
+                else if (colour == 'J') drawColour = Xwindow::Blue;
+                else if (colour == 'L') drawColour = Xwindow::Orange;
+                else if (colour == 'S') drawColour = Xwindow::Green;
+                else if (colour == 'Z') drawColour = Xwindow::Red;
+                else if (colour == 'T') drawColour = Xwindow::Magenta;
+                else if (colour == 'O') drawColour = Xwindow::Yellow;
+            }
+
+            window.fillRectangle(
+                p2OffsetX + c * cellSize,
+                p2OffsetY + r * cellSize,
+                cellSize, cellSize,
+                drawColour
+            );
+        }
+    }
+
+    // --- NEXT BLOCK ---
+    window.drawString(20,  height * cellSize + 110,
+                      "Next: " + std::string(1, p1.getNextBlock()->getType()));
+
+    window.drawString(220, height * cellSize + 110,
+                      "Next: " + std::string(1, p2.getNextBlock()->getType()));
+}
