@@ -32,4 +32,6 @@ export class Game {
          * @return The Board pointer of the specified player.
         */
         Board *getBoard(int player);
+
+        
 };
