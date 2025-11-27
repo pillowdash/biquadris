@@ -57,50 +57,9 @@ public:
 
   Cell *getCellAt(int x, int y) const;
 
-<<<<<<< HEAD
-  void notify() override
-  {
-    // Hummmmmm......
-    if (currentBlock->getIsDropped())
-    {
-      placeBlock(currentBlock.get());
-      currentBlock = nextBlock;
-      nextBlock = getBlock();
-    }
-
-    bool temp = true;
-    vector<Pos> positions = currentBlock->getPositions();
-    for (auto &p : positions) {
-      if (p.y == 17 || getCellAt(p.x, p.y)->getColor() != ' ') {
-        temp = false;
-        break;
-      }
-    }
-    
-    if (!temp) {
-      currentBlock->MoveUpByOne();
-      placeBlock(currentBlock.get());
-      currentBlock = nextBlock;
-      nextBlock = getBlock();
-    }
-  }
-
-  Cell *getCellAt(int x, int y) const
-  {
-    return &(*cells[y])[x];
-  }
-
-  void incScore(int inc)
-  {
-    score += inc;
-    if (score > highScore)
-      highScore = score;
-  }
-=======
   void incScore(int inc);
 
   void placeBlock(Block *b);
->>>>>>> cc85a3284f2ad18d9411b4c02cdfcf2ce1e16282
 
   bool getBlind() const { return isBlind; }
   void setBlind(bool b) { isBlind = b; }
