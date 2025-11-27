@@ -24,6 +24,13 @@ public:
   void incrementTick();
 };
 
+int Cell::getX() const { return x; }
+int Cell::getY() const { return y; }
+char Cell::getColor() const { return color; }
+int Cell::getTick() const { return tick; }
+void Cell::setColor(char c) { color = c; }
+void Cell::incrementTick() { ++tick; }
+
 export class Board : public Observer
 {
   vector<unique_ptr<vector<Cell>>> cells;
@@ -50,50 +57,9 @@ public:
 
   Cell *getCellAt(int x, int y) const;
 
-<<<<<<< HEAD
-  void notify() override
-  {
-    // Hummmmmm......
-    if (currentBlock->getIsDropped())
-    {
-      placeBlock(currentBlock.get());
-      currentBlock = nextBlock;
-      nextBlock = getBlock();
-    }
-
-    bool temp = true;
-    vector<Pos> positions = currentBlock->getPositions();
-    for (auto &p : positions) {
-      if (p.y == 17 || getCellAt(p.x, p.y)->getColor() != ' ') {
-        temp = false;
-        break;
-      }
-    }
-    
-    if (!temp) {
-      currentBlock->MoveUpByOne();
-      placeBlock(currentBlock.get());
-      currentBlock = nextBlock;
-      nextBlock = getBlock();
-    }
-  }
-
-  Cell *getCellAt(int x, int y) const
-  {
-    return &(*cells[y])[x];
-  }
-
-  void incScore(int inc)
-  {
-    score += inc;
-    if (score > highScore)
-      highScore = score;
-  }
-=======
   void incScore(int inc);
 
   void placeBlock(Block *b);
->>>>>>> cc85a3284f2ad18d9411b4c02cdfcf2ce1e16282
 
   bool getBlind() const { return isBlind; }
   void setBlind(bool b) { isBlind = b; }
@@ -104,3 +70,215 @@ public:
   Block *getCurrentBlock() const;
   Block *getNextBlock() const;
 };
+
+void Board::clearLines()
+{
+  for (int row = 0; row < height; ++row)
+  {
+
+    bool full = true;
+    for (int col = 0; col < width; ++col)
+    {
+      if ((*cells[row])[col].getColor() == ' ')
+      {
+        full = false;
+        break;
+      }
+    }
+
+    if (full)
+    {
+      for (int rowred = row; rowred > 0; --rowred)
+      {
+        cells[rowred] = move(cells[rowred - 1]);
+      }
+
+      auto newRow = make_unique<vector<Cell>>();
+      for (int col = 0; col < width; ++col)
+      {
+        newRow->emplace_back(col, 0, ' ');
+      }
+      cells[0] = move(newRow);
+      --row;
+    }
+  }
+}
+
+Board::Board(Level *lvl) : level{lvl}, width{11}, height{18}, 
+  score{0}, highScore{0}, isBlind{false}, isTerminate{false}
+{
+  for (int r = 0; r < height; ++r)
+  {
+    auto row = make_unique<std::vector<Cell>>();
+    row->reserve(width);
+
+    for (int c = 0; c < width; ++c)
+    {
+      row->emplace_back(c, r, ' ');
+    }
+    cells.push_back(move(row));
+  }
+  currentBlock = getBlock();
+  nextBlock = getBlock();
+}
+
+std::string Board::getInput()
+{
+  auto protection = currentBlock; // why is this here??
+  return currentBlock->getInput();
+}
+
+std::shared_ptr<Block> Board::getBlock()
+{
+  bool heavy = level->getIsHeavy();
+  char blockType = level->spawnBlock();
+  std::shared_ptr<Block> block;
+  if (blockType == 'I')
+  {
+    block = std::make_shared<I>(this);
+  }
+  else if (blockType == 'J')
+  {
+    block = std::make_shared<J>(this);
+  }
+  else if (blockType == 'L')
+  {
+    block = std::make_shared<L>(this);
+  }
+  else if (blockType == 'O')
+  {
+    block = std::make_shared<O>(this);
+  }
+  else if (blockType == 'S')
+  {
+    block = std::make_shared<S>(this);
+  }
+  else if (blockType == 'T')
+  {
+    block = std::make_shared<T>(this);
+  }
+  else if (blockType == 'Z')
+  {
+    block = std::make_shared<Z>(this);
+  }
+  else
+  {
+    throw std::invalid_argument("Invalid block type");
+  }
+  if (heavy)
+  {
+    block->IncHeaviness();
+  }
+  return block;
+}
+
+void Board::notify()
+{
+  std::cout << "Board notified!" << std::endl;
+  // Hummmmmm......
+  if (currentBlock->getIsDropped())
+  {
+    placeBlock(currentBlock.get());
+    currentBlock = nextBlock;
+    nextBlock = getBlock();
+  }
+
+  bool temp = true;
+  vector<Pos> positions = currentBlock->getPositions();
+  for (auto &p : positions) {
+    if (p.y == 17 || getCellAt(p.x, p.y)->getColor() != ' ') {
+      temp = false;
+      break;
+    }
+  }
+  
+  if (!temp) {
+    currentBlock->MoveUpByOne();
+    placeBlock(currentBlock.get());
+    currentBlock = nextBlock;
+    nextBlock = getBlock();
+    std::cout << "last call" << std::endl;
+  }
+}
+
+Cell *Board::getCellAt(int x, int y) const
+{
+  return &(*cells[y])[x];
+}
+
+void Board::incScore(int inc)
+{
+  score += inc;
+  if (score > highScore)
+    highScore = score;
+}
+
+void Board::placeBlock(Block *b)
+{
+  vector<Pos> basePos = b->getPositions();
+  int drop = 0;
+  while (true)
+  {
+    bool canDrop = true;
+    for (const auto &p : basePos)
+    {
+      int x = p.x;
+      int y = p.y + drop + 1;
+
+      if (y >= height)
+      {
+        canDrop = false;
+        break;
+      }
+      if ((*cells[y])[x].getColor() != ' ')
+      {
+        canDrop = false;
+        break;
+      }
+    }
+    if (!canDrop)
+      break;
+    ++drop;
+  }
+
+  for (const auto &p : basePos)
+  {
+    int x = p.x;
+    int y = p.y + drop;
+
+    if (x < 0 || x >= width || y < 0 || y >= height)
+    {
+      continue;
+    }
+
+    (*cells[y])[x].setColor(b->getType());
+  }
+  clearLines();
+  for (int r = 0; r < 3; ++r)
+  {
+    for (int col = 0; col < width; ++col)
+    {
+      if ((*cells[r])[col].getColor() != ' ')
+      {
+        isTerminate = true;
+        break;
+      }
+    }
+  }
+  return;
+}
+
+int Board::getScore() const
+{
+  return score;
+}
+
+Block *Board::getCurrentBlock() const
+{
+  return currentBlock.get();
+}
+
+Block *Board::getNextBlock() const
+{
+  return nextBlock.get();
+}
