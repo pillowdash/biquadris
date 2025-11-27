@@ -33,5 +33,6 @@ export class Game {
         */
         Board *getBoard(int player);
 
-        
+        Level *levelUp(int player);
+        Level *levelDown(int player);
 };

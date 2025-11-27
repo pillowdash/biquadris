@@ -66,7 +66,52 @@ export class Level4 : public Level {
         char spawnBlock() override;
 };
 
+export class LevelManager {
+    std::unique_ptr<Level> currentLevel;
+    public:
+        LevelManager(int initialLevel) {
+            switch (initialLevel) {
+                case 0:
+                    currentLevel = std::make_unique<Level0>("biquadris_sequence.txt");
+                    break;
+                case 1:
+                    currentLevel = std::make_unique<Level1>();
+                    break;
+                case 2:
+                    currentLevel = std::make_unique<Level2>();
+                    break;
+                case 3:
+                    currentLevel = std::make_unique<Level3>();
+                    break;
+                case 4:
+                    currentLevel = std::make_unique<Level4>();
+                    break;
+                default:
+                    throw std::invalid_argument("Invalid initial level number");
+            }
+        }
 
+        Level* levelUp() {
+            int nextLevelNum = currentLevel->getLevelNum() + 1;
+            switch (nextLevelNum) {
+                case 1:
+                    currentLevel = std::make_unique<Level1>();
+                    break;
+                case 2:
+                    currentLevel = std::make_unique<Level2>();
+                    break;
+                case 3:
+                    currentLevel = std::make_unique<Level3>();
+                    break;
+                case 4:
+                    currentLevel = std::make_unique<Level4>();
+                    break;
+                default:
+                    break;
+            }
+            return currentLevel.get();
+        }
+};
 
 
 
