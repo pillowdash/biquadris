@@ -104,7 +104,7 @@ void Board::clearLines()
   }
 }
 
-explicit Board::Board(Level *lvl) : level{lvl}, width{11}, height{18}, 
+Board::Board(Level *lvl) : level{lvl}, width{11}, height{18}, 
   score{0}, highScore{0}, isBlind{false}, isTerminate{false}
 {
   for (int r = 0; r < height; ++r)
