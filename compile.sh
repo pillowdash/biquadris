@@ -8,6 +8,7 @@ g++20 -c block.cc
 g++20 -c Level.cc
 g++20 -c Level-impl.cc
 g++20 -c Board.cc
+g++20 -c board-impl.cc
 g++20 -c Viewver.cc
 g++20 -c Viewver-impl.cc
 g++20 -c game.cc
