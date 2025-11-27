@@ -2,7 +2,7 @@
 shopt -s expand_aliases
 source ~/.aliases
 rm -rf gcm.cache
-g++20h iostream memory vector stdexcept string cstdlib
+g++20h iostream fstream memory vector stdexcept string cstdlib
 g++20 -c observer.cc
 g++20 -c block.cc
 g++20 -c Level.cc
