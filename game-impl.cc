@@ -7,13 +7,14 @@ import Viewver;
 
 // g++20 observer.o block.o Level.o Level-impl.o board.o viewver.o viewver-impl.o game.o game-impl.o main.o -o test 
 
-void Game::run(const Viewver &viewver) {
+void Game::run(Viewver &viewver) {
     // Implementation of the game loop
     while (player1->getTerminate() == false && player2->getTerminate() == false) {
         // Game logic here
 
         // Render the game state
         viewver.drawGrid(*player1, *player2, level1, level2);
+        viewver.drawGraphics(*player1, *player2, level1, level2);
         std::cout << "Player 1's turn:" << std::endl;
         std::string cmd1 = player1->getInput();
         std::cout << "Works" << std::endl;
@@ -21,6 +22,7 @@ void Game::run(const Viewver &viewver) {
             break;
         }
         viewver.drawGrid(*player1, *player2, level1, level2);
+        viewver.drawGraphics(*player1, *player2, level1, level2);
         std::cout << "Player 2's turn:" << std::endl;
         std::string cmd2 = player2->getInput();
 
