@@ -14,11 +14,14 @@ void Game::run(const Viewver &viewver) {
 
         // Render the game state
         viewver.drawGrid(*player1, *player2, level1, level2);
+        std::cout << "Player 1's turn:" << std::endl;
         std::string cmd1 = player1->getInput();
+        std::cout << "Works" << std::endl;
         if (player1->getTerminate() || player2->getTerminate()) {
             break;
         }
         viewver.drawGrid(*player1, *player2, level1, level2);
+        std::cout << "Player 2's turn:" << std::endl;
         std::string cmd2 = player2->getInput();
 
         // have trie of commands to handle all commands that are non left, right, rccw

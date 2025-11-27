@@ -97,6 +97,7 @@ public:
 
   std::string getInput()
   {
+    auto protection = currentBlock;
     return currentBlock->getInput();
   }
 
@@ -146,6 +147,7 @@ public:
 
   void notify() override
   {
+    std::cout << "Board notified!" << std::endl;
     // Hummmmmm......
     if (currentBlock->getIsDropped())
     {
@@ -157,18 +159,18 @@ public:
     bool temp = true;
     vector<Pos> positions = currentBlock->getPositions();
     for (auto &p : positions) {
-      if (getCellAt(p.x, p.y)->getColor() != ' ') {
+      if (p.y == 17 || getCellAt(p.x, p.y)->getColor() != ' ') {
         temp = false;
         break;
       }
     }
+    
     if (!temp) {
-      for (auto &p : currentBlock->getPositions()) {
-        p.y -= 1;
-      }
+      currentBlock->MoveUpByOne();
       placeBlock(currentBlock.get());
       currentBlock = nextBlock;
       nextBlock = getBlock();
+      std::cout << "last call" << std::endl;
     }
   }
 

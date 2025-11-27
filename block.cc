@@ -126,6 +126,8 @@ export class Block : public Controller {
 
         void RotateClockWise();
 
+        void MoveUpByOne();
+
         virtual std::vector<Pos> getPositions() const;
 
         virtual Rotation getRotation() const;
@@ -237,6 +239,12 @@ void Block::RotateClockWise() {
 
 std::vector<Pos> Block::getPositions() const {
     return positions;
+}
+
+void Block::MoveUpByOne() {
+    for (auto &pos : positions) {
+        pos.y -= 1;
+    }
 }
 
 Rotation Block::getRotation() const {
