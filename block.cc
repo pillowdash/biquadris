@@ -94,8 +94,8 @@ enum class Heaviness {
 export class Block : public Controller {
     protected:
         std::vector<Pos> positions;
-        Rotation rotation;
         char type;
+        Rotation rotation;
         Heaviness heaviness;
 
         /**
@@ -165,6 +165,7 @@ int Block::getExtreme(const string extreme) const {
     } else if (extreme == "right") {
         return getExtremeHelper(true, true);
     }
+    return 0;
 }
 
 void Block::rotate(Rotation dir) {

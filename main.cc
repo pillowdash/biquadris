@@ -6,6 +6,8 @@ import <iostream>;
 import <vector>;
 import <string>;
 
+const int BOARD_WIDTH = 11;
+const int BOARD_HEIGHT = 18;
 
 int main(int argc, char **argv) {
     char selectedBlock = 0;
@@ -16,7 +18,7 @@ int main(int argc, char **argv) {
     Board board1 = Board(&level3);
     Board board2 = Board(&level3);
     Game game = Game(&board1, &board2, &level3, &level3);
-    Viewver viewver = Viewver(11, 18);
+    Viewver viewver = Viewver(BOARD_WIDTH, BOARD_HEIGHT);
 
     try {
         game.run(viewver);
