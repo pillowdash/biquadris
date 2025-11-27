@@ -5,18 +5,23 @@ import <string>;
 import <memory>;
 import <cstdlib>;
 import <iostream>;
+import <fstream>;
 import Block;
 
 Level::Level() : levelNum{0} {} 
 
 
 char Level0::spawnBlock() {
-    if (selectedBlock != 0) {
-        return selectedBlock;
+    char blockType;
+    if (file.is_open()) {
+        file >> blockType;
+        if (file.eof()) {
+            resetFile();
+            file >> blockType;
+        }
+    } else {
+        throw std::runtime_error("Level0: Unable to open block sequence file.");
     }
-    std::vector<char> blockTypes = {'I', 'J', 'L', 'O', 'S', 'T', 'Z'};
-    int randIndex = rand() % blockTypes.size();
-    char blockType = blockTypes[randIndex];
     return blockType;
 }
 
@@ -51,7 +56,7 @@ Level3::Level3() {
 }
 
 char Level3::spawnBlock() {
-    std::vector<char> blockTypes = {'I', 'J', 'L', 'O', 'S', 'T', 'Z'};
+    std::vector<char> blockTypes = {'I', 'J', 'L', 'O', 'S', 'S','T', 'Z', 'Z'};
     int randIndex = rand() % blockTypes.size();
     char blockType = blockTypes[randIndex];
     return blockType;

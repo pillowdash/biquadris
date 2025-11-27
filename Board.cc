@@ -147,7 +147,6 @@ public:
 
   void notify() override
   {
-    std::cout << "Board notified!" << std::endl;
     // Hummmmmm......
     if (currentBlock->getIsDropped())
     {
@@ -170,7 +169,6 @@ public:
       placeBlock(currentBlock.get());
       currentBlock = nextBlock;
       nextBlock = getBlock();
-      std::cout << "last call" << std::endl;
     }
   }
 

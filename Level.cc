@@ -3,6 +3,7 @@ import <memory>;
 import <vector>;
 import <string>;
 import <cstdlib>;
+import <fstream>;
 import Block;
 
 export class Level {
@@ -12,6 +13,7 @@ export class Level {
 
     public:
         Level();
+        virtual ~Level() = default;
         virtual char spawnBlock() = 0;
         virtual int getLevelNum() const {
             return levelNum;
@@ -22,9 +24,21 @@ export class Level {
 };
 
 export class Level0 : public Level {
-    char selectedBlock;
+    std::ifstream file;
+    std::string filename;
     public:
-        Level0(char sb = 0) : selectedBlock{sb} { levelNum = 0; }
+        Level0(const std::string &filename) : filename{filename} {
+            levelNum = 0; 
+            file.open(filename);
+        }
+
+        void resetFile() {
+            if (file.is_open()) {
+                file.close();
+            }
+            file.open(filename);
+        }
+
         char spawnBlock() override;
 };
 

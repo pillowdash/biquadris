@@ -59,18 +59,18 @@ bool Controller::getIsDropped() const {
 string Controller::getInput() {
     string cmd;
     cin >> cmd;
-    if (cmd == "l") {
+    if (cmd == "left") {
         MoveLeft();
-    } else if (cmd == "r") {
+    } else if (cmd == "right") {
         // Move Right
         MoveRight();
-    } else if (cmd == "rcw") {
+    } else if (cmd == "clockwise") {
         // Rotate Clockwise
         RotateClockWise();
-    } else if (cmd == "rccw") {
+    } else if (cmd == "counterclockwise") {
         // Rotate CounterClockwise
         RotateCounterClockWise();
-    } else if (cmd == "d") {
+    } else if (cmd == "drop") {
         isDropped = true;
         notifyBoard();
     }
