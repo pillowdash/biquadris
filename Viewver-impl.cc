@@ -280,4 +280,6 @@ void Viewwer::drawDiff(const Board &p1, const Board &p2,
 
     window.drawString(p2OffsetX, height * cellSize + 110,
                       "Next: " + std::string(1, p2.getNextBlock()->getType()));
+
+    cacheCells();
 }

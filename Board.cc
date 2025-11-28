@@ -22,7 +22,7 @@ public:
   int getTick() const;
   void setColor(char c);
   void incrementTick();
-  Cell operator=(const Cell &other) = default;
+  Cell &operator=(const Cell &other) = default;
 };
 
 export class Board : public Observer
