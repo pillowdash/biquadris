@@ -222,6 +222,30 @@ Block *Board::getNextBlock() const
   return nextBlock.get();
 }
 
+void Board::getCellsCopy() {
+  cellsCopy.clear();
+  for (int r = 0; r < height; ++r) {
+    vector<Cell> row;
+    for (int c = 0; c < width; ++c) {
+      row.push_back((*cells[r])[c]);
+    }
+    cellsCopy.push_back(row);
+  }
+}
+
+void Board::initializeCellsCopy() {
+  cellsCopy.resize(height);
+  for (int r = 0; r < height; ++r) {
+    cellsCopy[r].resize(width);
+    for (int c = 0; c < width; ++c) {
+      cellsCopy[r][c] = Cell(c, r, '+');
+    }
+  }
+}
+
+bool Board::cellHasChanged(int x, int y) const {
+  return cellsCopy[y][x].getColor() != (*cells[y])[x].getColor();
+}
 
 /*
 void Board::cacheCells() {

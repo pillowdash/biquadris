@@ -12,10 +12,14 @@ export class Viewver {
   int width;
   int height;
   Xwindow window;
+  std::vector<Pos> previousCBPosP1;
+  std::vector<Pos> previousCBPosP2;
   bool setUpFirstTime = true;
 
   void drawDiff(const Board &p1, const Board &p2,
            const Level* level_p1, const Level* level_p2);
+
+  bool isBlockStillThere(int x, int y, const std::vector<Pos> &positions);
 public:
   Viewver(int w = 11, int h = 18);
   /**

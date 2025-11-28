@@ -9,10 +9,14 @@ import Viewver;
 // g++20 observer.o block.o Level.o Level-impl.o board.o viewver.o viewver-impl.o game.o game-impl.o main.o -o test 
 
 void Game::run(Viewver &viewver) {
-    // Implementation of the game loop
+    player1->initializeCellsCopy();
+    player2->initializeCellsCopy();
+    viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
+    viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+    player1->getCellsCopy();
+    player2->getCellsCopy();
     while (player1->getTerminate() == false && player2->getTerminate() == false) {
         // Game logic here
-
         // Render the game state
         viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
         viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
@@ -25,14 +29,21 @@ void Game::run(Viewver &viewver) {
             levelDown(1);
             player1->setLevel(level1.get());
         }
-        std::cout << "Works" << std::endl;
         if (player1->getTerminate() || player2->getTerminate()) {
             break;
         }
         viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
         viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+        player1->getCellsCopy(); 
+        player2->getCellsCopy();
+
         std::cout << "Player 2's turn:" << std::endl;
         std::string cmd2 = player2->getInput();
+        
+        viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
+        viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+        player1->getCellsCopy();
+        player2->getCellsCopy();
 
         // have trie of commands to handle all commands that are non left, right, rccw
     }

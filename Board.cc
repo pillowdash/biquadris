@@ -9,13 +9,24 @@ using namespace std;
 
 export class Cell
 {
-  const int x;
-  const int y;
+  int x;
+  int y;
   char color;
   int tick;
 
 public:
   Cell(int x = 0, int y = 0, char c = ' ') : x{x}, y{y}, color{c}, tick{0} {}
+  Cell(const Cell &other) = default;
+  Cell &operator=(const Cell &other) {
+    if (this == &other) {
+      return *this;
+    }
+    x = other.x;
+    y = other.y;
+    color = other.color;
+    tick = other.tick;
+    return *this;
+  }
   int getX() const;
   int getY() const;
   char getColor() const;
@@ -28,7 +39,7 @@ public:
 export class Board : public Observer
 {
   vector<unique_ptr<vector<Cell>>> cells;
-  //vector<vector<Cell>> cachedCells;
+  vector<vector<Cell>> cellsCopy;
   Level *level;
   int width;
   int height;
@@ -52,6 +63,8 @@ public:
 
   Cell *getCellAt(int x, int y) const;
 
+  bool cellHasChanged(int x, int y) const;
+
   void incScore(int inc);
 
   void placeBlock(Block *b);
@@ -61,7 +74,8 @@ public:
   bool getTerminate() const {return isTerminate;}
   void setLevel(Level* lvl) { level = lvl; }
 
-
+  void getCellsCopy();
+  void initializeCellsCopy();
   int getScore() const;
   Block *getCurrentBlock() const;
   Block *getNextBlock() const;
