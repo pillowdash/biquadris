@@ -12,6 +12,10 @@ export class Viewver {
   int width;
   int height;
   Xwindow window;
+  bool setUpFirstTime = true;
+
+  void drawDiff(const Board &p1, const Board &p2,
+           const Level* level_p1, const Level* level_p2);
 public:
   Viewver(int w = 11, int h = 18);
   /**

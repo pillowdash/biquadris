@@ -57,13 +57,14 @@ Board::Board(Level *lvl) : level{lvl}, width{11}, height{18},
     }
     cells.push_back(move(row));
   }
+  cacheCells();
   currentBlock = getBlock();
   nextBlock = getBlock();
 }
 
 std::string Board::getInput()
 {
-  auto protection = currentBlock; // why is this here??
+  auto protection = currentBlock; // to prevent use after free error
   return currentBlock->getInput();
 }
 
@@ -222,3 +223,23 @@ Block *Board::getNextBlock() const
   return nextBlock.get();
 }
 
+void Board::cacheCells() {
+  // use copy assignment operator to copy cells to cachedCells
+  for (auto &vecCells : cells) {
+    for (auto &cel : vecCells) {
+      cachedCells[cel.getY()][cel.getX()] = cel;
+    }
+  }
+}
+
+vector<Cell> Board::cacheDiff() {
+  vector<Cell> diffs;
+  for (auto &vecCells : cells) {
+    for (auto &cel : vecCells) {
+      if (cachedCells[cel.getY()][cel.getX()].getColor() != cel.getColor()) {
+        diffs.push_back(cel);
+      }
+    }
+  }
+  return diffs;
+}

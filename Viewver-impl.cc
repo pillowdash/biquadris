@@ -6,7 +6,7 @@ import <iostream>;
 import <string>;
 import <vector>;
 
-Viewver::Viewver(int w, int h) : width{w}, height{h}, window{500, 500} {};
+Viewver::Viewver(int w, int h) : width{w}, height{h}, window{500, 500} {}
 
 bool isBlockPosition(const std::vector<Pos> &positions, Pos position) {
     for (const auto &pos : positions) {
@@ -60,8 +60,14 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
     std::cout << "Next: " << nextBlock1->getType() << "                "
               << "Next: " << nextBlock2->getType() << std::endl;
 }
+
 void Viewver::drawGraphics(const Board &p1, const Board &p2,
                            const Level* level_p1, const Level* level_p2) {
+
+    if (!setUpFirstTime) {
+        drawDiff(p1, p2, level_p1, level_p2);
+        return;
+    }
 
     // --- TEXT HEADER ---
     window.drawString(20, 20,  "Level: " + std::to_string(level_p1->getLevelNum()));
@@ -147,9 +153,131 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
     }
 
     // --- NEXT BLOCK ---
-    window.drawString(20,  height * cellSize + 110,
+    window.drawString(p1OffsetX,  height * cellSize + 110,
                       "Next: " + std::string(1, p1.getNextBlock()->getType()));
 
-    window.drawString(220, height * cellSize + 110,
+    window.drawString(p2OffsetX, height * cellSize + 110,
+                      "Next: " + std::string(1, p2.getNextBlock()->getType()));
+    setUpFirstTime = false;
+}
+
+void Viewwer::drawDiff(const Board &p1, const Board &p2,
+                           const Level* level_p1, const Level* level_p2) {
+
+    const int cellSize = 20;
+    const int p1OffsetX = 20;
+    const int p1OffsetY = 70;
+
+    const int p2OffsetX = 220;
+    const int p2OffsetY = 70;
+
+    // --- TEXT HEADER ---
+    window.drawString(p1OffsetX, 20,  "Level: " + std::to_string(level_p1->getLevelNum()));
+    window.drawString(p2OffsetX, 20, "Level: " + std::to_string(level_p2->getLevelNum()));
+
+    window.drawString(p1OffsetX, 40,  "Score: " + std::to_string(p1.getScore()));
+    window.drawString(p2OffsetX, 40, "Score: " + std::to_string(p2.getScore()));
+
+    Block *currentBlock1 = p1.getCurrentBlock();
+    Block *currentBlock2 = p2.getCurrentBlock();
+
+    vector<Pos> pos1 = currentBlock1->getPositions();
+    vector<Pos> pos2 = currentBlock2->getPositions();
+
+    vector<Cell> diffs1 = p1.cacheDiff();
+    vector<Cell> diffs2 = p2.cacheDiff();
+
+    for (auto &cell : diffs1) {
+        int c = cell.getX();
+        int r = cell.getY();
+
+        int drawColour = Xwindow::White;
+
+        Pos p{c, r};
+
+        if (isBlockPosition(pos1, p)) {
+            // falling block overrides board
+            drawColour = Xwindow::Cyan;  
+        } else {
+            char colour = p1.getCellAt(c, r)->getColor();
+
+            if (colour == 'I') drawColour = Xwindow::Cyan;
+            else if (colour == 'J') drawColour = Xwindow::Blue;
+            else if (colour == 'L') drawColour = Xwindow::Orange;
+            else if (colour == 'S') drawColour = Xwindow::Green;
+            else if (colour == 'Z') drawColour = Xwindow::Red;
+            else if (colour == 'T') drawColour = Xwindow::Magenta;
+            else if (colour == 'O') drawColour = Xwindow::Yellow;
+        }
+
+        window.fillRectangle(
+            p1OffsetX + c * cellSize,
+            p1OffsetY + r * cellSize,
+            cellSize, cellSize,
+            drawColour
+        );
+    }
+
+    for (auto &cell : diffs2) {
+        int c = cell.getX();
+        int r = cell.getY();
+
+        int drawColour = Xwindow::White;
+
+        Pos p{c, r};
+
+        if (isBlockPosition(pos2, p)) {
+            drawColour = Xwindow::Cyan;
+        } else {
+            char colour = p2.getCellAt(c, r)->getColor();
+
+            if (colour == 'I') drawColour = Xwindow::Cyan;
+            else if (colour == 'J') drawColour = Xwindow::Blue;
+            else if (colour == 'L') drawColour = Xwindow::Orange;
+            else if (colour == 'S') drawColour = Xwindow::Green;
+            else if (colour == 'Z') drawColour = Xwindow::Red;
+            else if (colour == 'T') drawColour = Xwindow::Magenta;
+            else if (colour == 'O') drawColour = Xwindow::Yellow;
+        }
+
+        window.fillRectangle(
+            p2OffsetX + c * cellSize,
+            p2OffsetY + r * cellSize,
+            cellSize, cellSize,
+            drawColour
+        );
+    }
+
+    for (auto &pos : pos1) {
+        int c = pos.x;
+        int r = pos.y;
+
+        window.fillRectangle(
+            p1OffsetX + c * cellSize,
+            p1OffsetY + r * cellSize,
+            cellSize, cellSize,
+            Xwindow::Cyan
+        );
+    }
+
+    for (auto &pos : pos2) {
+        int c = pos.x;
+        int r = pos.y;
+
+        window.fillRectangle(
+            p2OffsetX + c * cellSize,
+            p2OffsetY + r * cellSize,
+            cellSize, cellSize,
+            Xwindow::Cyan
+        );
+    }
+
+
+
+    // --- NEXT BLOCK ---
+    window.drawString(p1OffsetX,  height * cellSize + 110,
+                      "Next: " + std::string(1, p1.getNextBlock()->getType()));
+
+    window.drawString(p2OffsetX, height * cellSize + 110,
                       "Next: " + std::string(1, p2.getNextBlock()->getType()));
 }
