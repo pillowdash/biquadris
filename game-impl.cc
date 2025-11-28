@@ -2,34 +2,48 @@ module Game;
 import <stdexcept>;
 import <iostream>;
 import <string>;
+import <memory>;
 import Board;
 import Viewver;
 
 // g++20 observer.o block.o Level.o Level-impl.o board.o viewver.o viewver-impl.o game.o game-impl.o main.o -o test 
 
 void Game::run(Viewver &viewver) {
-    // Implementation of the game loop
+    player1->initializeCellsCopy();
+    player2->initializeCellsCopy();
+    viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
+    viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+    player1->getCellsCopy();
+    player2->getCellsCopy();
     while (player1->getTerminate() == false && player2->getTerminate() == false) {
         // Game logic here
-
         // Render the game state
-        viewver.drawGrid(*player1, *player2, level1, level2);
-        viewver.drawGraphics(*player1, *player2, level1, level2);
+        viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
+        viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
         std::cout << "Player 1's turn:" << std::endl;
         std::string cmd1 = player1->getInput();
         if (cmd1 == "levelup") {
-            level1 = levelUp(1);
+            levelUp(1);
+            player1->setLevel(level1.get());
         } else if (cmd1 == "leveldown") {
-            level1 = levelDown(1);
+            levelDown(1);
+            player1->setLevel(level1.get());
         }
-        std::cout << "Works" << std::endl;
         if (player1->getTerminate() || player2->getTerminate()) {
             break;
         }
-        viewver.drawGrid(*player1, *player2, level1, level2);
-        viewver.drawGraphics(*player1, *player2, level1, level2);
+        viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
+        viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+        player1->getCellsCopy(); 
+        player2->getCellsCopy();
+
         std::cout << "Player 2's turn:" << std::endl;
         std::string cmd2 = player2->getInput();
+        
+        viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
+        viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+        player1->getCellsCopy();
+        player2->getCellsCopy();
 
         // have trie of commands to handle all commands that are non left, right, rccw
     }
@@ -47,9 +61,9 @@ void Game::reset() {
 
 Level *Game::getLevel(int player) {
     if (player == 1) {
-        return level1;
+        return level1.get();
     } else if (player == 2) {
-        return level2;
+        return level2.get();
     } else {
         throw std::invalid_argument("Invalid player number");
     }
@@ -57,29 +71,89 @@ Level *Game::getLevel(int player) {
 
 Board *Game::getBoard(int player) {
     if (player == 1) {
-        return player1;
+        return player1.get();
     } else if (player == 2) {
-        return player2;
+        return player2.get();
     } else {
         throw std::invalid_argument("Invalid player number");
     }
 }
 
-Level *Game::levelUp(int player) {
+void Game::levelUp(int player) {
     if (player == 1) {
-        return level1->levelUp();
+        switch (level1->getLevelNum()) {
+            case 0:
+                level1 = std::make_unique<Level1>();
+                break;
+            case 1:
+                level1 = std::make_unique<Level2>();
+                break;
+            case 2:
+                level1 = std::make_unique<Level3>();
+                break;
+            case 3:
+                level1 = std::make_unique<Level4>();
+                break;
+            default:
+                break;
+        }
     } else if (player == 2) {
-        return level2->levelUp();
+        switch (level2->getLevelNum()) {
+            case 0:
+                level2 = std::make_unique<Level1>();
+                break;
+            case 1:
+                level2 = std::make_unique<Level2>();
+                break;
+            case 2:
+                level2 = std::make_unique<Level3>();
+                break;
+            case 3:
+                level2 = std::make_unique<Level4>();
+                break;
+            default:
+                break;
+        }
     } else {
         throw std::invalid_argument("Invalid player number");
     }
 }
 
-Level *Game::levelDown(int player) {
+void Game::levelDown(int player) {
     if (player == 1) {
-        return level1->levelDown();
+        switch (level1->getLevelNum()) {
+            case 4:
+                level1 = std::make_unique<Level3>();
+                break;
+            case 3:
+                level1 = std::make_unique<Level2>();
+                break;
+            case 2:
+                level1 = std::make_unique<Level1>();
+                break;
+            case 1:
+                level1 = std::make_unique<Level0>("biquadris_sequence.txt");
+                break;
+            default:
+                break;
+        }
     } else if (player == 2) {
-        return level2->levelDown();
+        switch (level2->getLevelNum()) {
+            case 4:
+                level2 = std::make_unique<Level3>();
+                break;
+            case 3:
+                level2 = std::make_unique<Level2>();
+                break;
+            case 2:
+                level2 = std::make_unique<Level1>();
+                break;
+            case 1:
+                level2 = std::make_unique<Level0>("biquadris_sequence.txt");
+                break;
+            default:
+                break;
+        }
     } else {
         throw std::invalid_argument("Invalid player number");
     }

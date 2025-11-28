@@ -57,7 +57,6 @@ Board::Board(Level *lvl) : level{lvl}, width{11}, height{18},
     }
     cells.push_back(move(row));
   }
-  cacheCells();
   currentBlock = getBlock();
   nextBlock = getBlock();
 }
@@ -108,13 +107,13 @@ std::shared_ptr<Block> Board::getBlock()
   if (heavy)
   {
     block->IncHeaviness();
+    std::cout << "Works!!!!" << std::endl;
   }
   return block;
 }
 
 void Board::notify()
 {
-  std::cout << "Board notified!" << std::endl;
   // Hummmmmm......
   if (currentBlock->getIsDropped())
   {
@@ -223,6 +222,32 @@ Block *Board::getNextBlock() const
   return nextBlock.get();
 }
 
+void Board::getCellsCopy() {
+  cellsCopy.clear();
+  for (int r = 0; r < height; ++r) {
+    vector<Cell> row;
+    for (int c = 0; c < width; ++c) {
+      row.push_back((*cells[r])[c]);
+    }
+    cellsCopy.push_back(row);
+  }
+}
+
+void Board::initializeCellsCopy() {
+  cellsCopy.resize(height);
+  for (int r = 0; r < height; ++r) {
+    cellsCopy[r].resize(width);
+    for (int c = 0; c < width; ++c) {
+      cellsCopy[r][c] = Cell(c, r, '+');
+    }
+  }
+}
+
+bool Board::cellHasChanged(int x, int y) const {
+  return cellsCopy[y][x].getColor() != (*cells[y])[x].getColor();
+}
+
+/*
 void Board::cacheCells() {
   // use copy assignment operator to copy cells to cachedCells
   for (int i = 0; i < height; ++i) {
@@ -243,3 +268,4 @@ vector<Cell> Board::cacheDiff() {
   }
   return diffs;
 }
+*/
