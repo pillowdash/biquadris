@@ -57,7 +57,6 @@ Board::Board(Level *lvl) : level{lvl}, width{11}, height{18},
     }
     cells.push_back(move(row));
   }
-  cacheCells();
   currentBlock = getBlock();
   nextBlock = getBlock();
 }
@@ -108,13 +107,13 @@ std::shared_ptr<Block> Board::getBlock()
   if (heavy)
   {
     block->IncHeaviness();
+    std::cout << "Works!!!!" << std::endl;
   }
   return block;
 }
 
 void Board::notify()
 {
-  std::cout << "Board notified!" << std::endl;
   // Hummmmmm......
   if (currentBlock->getIsDropped())
   {
@@ -223,6 +222,8 @@ Block *Board::getNextBlock() const
   return nextBlock.get();
 }
 
+
+/*
 void Board::cacheCells() {
   // use copy assignment operator to copy cells to cachedCells
   for (int i = 0; i < height; ++i) {
@@ -243,3 +244,4 @@ vector<Cell> Board::cacheDiff() {
   }
   return diffs;
 }
+*/

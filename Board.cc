@@ -22,13 +22,13 @@ public:
   int getTick() const;
   void setColor(char c);
   void incrementTick();
-  Cell &operator=(const Cell &other) = default;
+  //Cell &operator=(const Cell &other) = default;
 };
 
 export class Board : public Observer
 {
   vector<unique_ptr<vector<Cell>>> cells;
-  vector<vector<Cell>> cachedCells;
+  //vector<vector<Cell>> cachedCells;
   Level *level;
   int width;
   int height;
@@ -59,6 +59,7 @@ public:
   bool getBlind() const { return isBlind; }
   void setBlind(bool b) { isBlind = b; }
   bool getTerminate() const {return isTerminate;}
+  void setLevel(Level* lvl) { level = lvl; }
 
 
   int getScore() const;
@@ -67,6 +68,6 @@ public:
 
   // only called by Viewver-impl.cc
 
-  void cacheCells(); // will save the current cells in [cells] to [cachedcells]
-  vector<Cell> cacheDiff(); // sends the difference between [cells] and [cachedcells]
+  //void cacheCells(); // will save the current cells in [cells] to [cachedcells]
+  //vector<Cell> cacheDiff(); // sends the difference between [cells] and [cachedcells]
 };

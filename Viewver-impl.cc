@@ -64,10 +64,6 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
 void Viewver::drawGraphics(const Board &p1, const Board &p2,
                            const Level* level_p1, const Level* level_p2) {
 
-    if (!setUpFirstTime) {
-        drawDiff(p1, p2, level_p1, level_p2);
-        return;
-    }
 
     // --- TEXT HEADER ---
     window.drawString(20, 20,  "Level: " + std::to_string(level_p1->getLevelNum()));
@@ -161,6 +157,7 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
     setUpFirstTime = false;
 }
 
+/*
 void Viewwer::drawDiff(const Board &p1, const Board &p2,
                            const Level* level_p1, const Level* level_p2) {
 
@@ -283,3 +280,4 @@ void Viewwer::drawDiff(const Board &p1, const Board &p2,
 
     cacheCells();
 }
+*/

@@ -16,11 +16,7 @@ int main(int argc, char **argv) {
     if (argc == 2) {
         selectedBlock = *argv[1];
     }
-    LevelManager levelManagerP1(0);
-    LevelManager levelManagerP2(0);
-    Board board1 = Board(levelManagerP1->getCurrentLevel());
-    Board board2 = Board(levelManagerP2->getCurrentLevel());
-    Game game = Game(&board1, &board2, &levelManagerP1, &levelManagerP2);
+    Game game = Game(1, 1);
     Viewver viewver = Viewver(BOARD_WIDTH, BOARD_HEIGHT);
 
     try {

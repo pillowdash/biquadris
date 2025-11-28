@@ -1,16 +1,59 @@
 export module Game;
+import <memory>;
 import Board;
 import Level;
 import Viewver;
 import <stdexcept>;
 
 export class Game {
-    Board *player1;
-    Board *player2;
-    LevelManager *level1;
-    LevelManager *level2;
+    std::unique_ptr<Level> level1;
+    std::unique_ptr<Level> level2;
+    std::unique_ptr<Board> player1;
+    std::unique_ptr<Board> player2;
     public:
-        Game(Board *p1, Board *p2, LevelManager *l1, LevelManager *l2) : player1{p1}, player2{p2}, level1{l1}, level2{l2} {}
+        Game(int level1, int level2) {
+            switch (level1) {
+                case 0:
+                    this->level1 = std::make_unique<Level0>("biquadris_sequence1.txt");
+                    break;
+                case 1:
+                    this->level1 = std::make_unique<Level1>();
+                    break;
+                case 2:
+                    this->level1 = std::make_unique<Level2>();
+                    break;
+                case 3:
+                    this->level1 = std::make_unique<Level3>();
+                    break;
+                case 4:
+                    this->level1 = std::make_unique<Level4>();
+                    break;
+                default:
+                    throw std::invalid_argument("Invalid level number for player 1");
+            }
+
+            switch (level2) {
+                case 0:
+                    this->level2 = std::make_unique<Level0>("biquadris_sequence2.txt");
+                    break;
+                case 1:
+                    this->level2 = std::make_unique<Level1>();
+                    break;
+                case 2:
+                    this->level2 = std::make_unique<Level2>();
+                    break;
+                case 3:
+                    this->level2 = std::make_unique<Level3>();
+                    break;
+                case 4:
+                    this->level2 = std::make_unique<Level4>();
+                    break;
+                default:
+                    throw std::invalid_argument("Invalid level number for player 2");
+            }
+            player1 = std::make_unique<Board>(this->level1.get());
+            player2 = std::make_unique<Board>(this->level2.get());
+        }
         /** 
          * Runs the game loop, might throw exceptions.
          * @param viewver The Viewver instance to render the game.
@@ -33,6 +76,6 @@ export class Game {
         */
         Board *getBoard(int player);
 
-        Level *levelUp(int player);
-        Level *levelDown(int player);
+        void levelUp(int player);
+        void levelDown(int player);
 };
