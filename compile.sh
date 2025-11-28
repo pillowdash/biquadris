@@ -18,5 +18,5 @@ g++20 -c Viewver-impl.cc
 g++20 -c game.cc
 g++20 -c game-impl.cc
 g++20 -c main.cc
-g++20 window.o window-impl.o observer.o observer-impl.o block.o block-impl.o Level.o Level-impl.o Board.o Viewver.o Viewver-impl.o game.o game-impl.o main.o -o test -lX11
+g++20 window.o window-impl.o observer.o observer-impl.o block.o block-impl.o Level.o Level-impl.o Board.o board-impl.o Viewver.o Viewver-impl.o game.o game-impl.o main.o -o test -o test -lX11
 rm *.o
