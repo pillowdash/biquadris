@@ -225,19 +225,19 @@ Block *Board::getNextBlock() const
 
 void Board::cacheCells() {
   // use copy assignment operator to copy cells to cachedCells
-  for (auto &vecCells : cells) {
-    for (auto &cel : vecCells) {
-      cachedCells[cel.getY()][cel.getX()] = cel;
+  for (int i = 0; i < height; ++i) {
+    for (int j = 0; j < width; ++j) {
+      cachedCells[i][j] = (*cells[i])[j];
     }
   }
 }
 
 vector<Cell> Board::cacheDiff() {
   vector<Cell> diffs;
-  for (auto &vecCells : cells) {
-    for (auto &cel : vecCells) {
-      if (cachedCells[cel.getY()][cel.getX()].getColor() != cel.getColor()) {
-        diffs.push_back(cel);
+  for (int i = 0; i < height; ++i) {
+    for (int j = 0; j < width; ++j) {
+      if (cachedCells[i][j].getColor() != (*cells[i])[j].getColor()) {
+        diffs.push_back((*cells[i])[j]);
       }
     }
   }
