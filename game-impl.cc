@@ -16,22 +16,11 @@ void Game::run(Viewver &viewver) {
     player1->getCellsCopy();
     player2->getCellsCopy();
     while (player1->getTerminate() == false && player2->getTerminate() == false) {
-        // Game logic here
-        // Render the game state
         viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
         viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
         std::cout << "Player 1's turn:" << std::endl;
         std::string cmd1 = player1->getInput();
-        if (cmd1 == "levelup") {
-            levelUp(1);
-            player1->setLevel(level1.get());
-        } else if (cmd1 == "leveldown") {
-            levelDown(1);
-            player1->setLevel(level1.get());
-        }
-        if (player1->getTerminate() || player2->getTerminate()) {
-            break;
-        }
+        commandManager(cmd1, 1);
         viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
         viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
         player1->getCellsCopy(); 
@@ -39,7 +28,8 @@ void Game::run(Viewver &viewver) {
 
         std::cout << "Player 2's turn:" << std::endl;
         std::string cmd2 = player2->getInput();
-        
+        commandManager(cmd2, 2);
+
         viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
         viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
         player1->getCellsCopy();
@@ -74,6 +64,38 @@ Board *Game::getBoard(int player) {
         return player1.get();
     } else if (player == 2) {
         return player2.get();
+    } else {
+        throw std::invalid_argument("Invalid player number");
+    }
+}
+
+void Game::commandManager(std::string command, int player) {
+    std::cout << "Command received for player " << player << ": " << command << std::endl;
+    if (player == 1) {
+        if (command == "levelup") {
+            levelUp(1);
+            player1->setLevel(level1.get());
+        } else if (command == "leveldown") {
+            levelDown(1);
+            player1->setLevel(level1.get());
+        } else if (command == "norandom") {
+            if (level1->getLevelNum() == 3 || level1->getLevelNum() == 4) {
+                std::string filemname;
+                std::cin >> filemname;
+                level1->setFile(filemname);
+                std::cout << "Player 1 is not random: File set to " << filemname << std::endl;
+            }
+        } else if (command == "random") {
+
+        }
+    } else if (player == 2) {
+        if (command == "levelup") {
+            levelUp(2);
+            player2->setLevel(level2.get());
+        } else if (command == "leveldown") {
+            levelDown(2);
+            player2->setLevel(level2.get());
+        }
     } else {
         throw std::invalid_argument("Invalid player number");
     }

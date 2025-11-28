@@ -15,6 +15,7 @@ export class Level {
         Level();
         virtual ~Level() = default;
         virtual char spawnBlock() = 0;
+        virtual void setFile(const std::string &filename) {}
         virtual int getLevelNum() const {
             return levelNum;
         }
@@ -55,15 +56,40 @@ export class Level2 : public Level {
 };
 
 export class Level3 : public Level {
+    std::ifstream file;
+    std::string filename;
+    protected:
+        bool israndom = true;
+        char randomSpawnBlock();
+        char nonRandomSpawnBlock();
     public:
         Level3();
+        void setFile(const std::string &filename) override {
+            this->filename = filename;
+            if (file.is_open()) {
+                file.close();
+            }
+            file.open(filename);
+            israndom = false;
+        }
+
+        void resetFile() {
+            if (file.is_open()) {
+                file.close();
+            }
+            file.open(filename);
+        }
+
+        void setRandom(bool val) {
+            israndom = val;
+        }
+
         char spawnBlock() override;
 };
 
-export class Level4 : public Level {
+export class Level4 : public Level3 {
     public:
         Level4();
-        char spawnBlock() override;
 };
 
 

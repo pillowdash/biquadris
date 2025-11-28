@@ -168,7 +168,6 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
 
     window.drawString(p2OffsetX, height * cellSize + 110,
                       "Next: " + std::string(1, p2.getNextBlock()->getType()));
-    setUpFirstTime = false;
     previousCBPosP1 = p1.getCurrentBlock()->getPositions();
     previousCBPosP2 = p2.getCurrentBlock()->getPositions();
 }

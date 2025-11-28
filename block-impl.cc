@@ -18,6 +18,7 @@ bool Controller::getIsDropped() const {
 string Controller::getInput() {
     string cmd;
     cin >> cmd;
+    std::cout << "Received command: " << cmd << std::endl;
     if (cmd == "left") {
         MoveLeft();
     } else if (cmd == "right") {

@@ -56,21 +56,34 @@ Level3::Level3() {
 }
 
 char Level3::spawnBlock() {
-    std::vector<char> blockTypes = {'I', 'J', 'L', 'O', 'S', 'S','T', 'Z', 'Z'};
-    int randIndex = rand() % blockTypes.size();
-    char blockType = blockTypes[randIndex];
-    return blockType;
+    if (israndom) {
+        return randomSpawnBlock();
+    } else {
+        return nonRandomSpawnBlock();
+    }
 }
 
-
-Level4::Level4() {
-    levelNum = 4;
-}
-
-
-char Level4::spawnBlock() {
+char Level3::randomSpawnBlock() {
     std::vector<char> blockTypes = {'I', 'J', 'L', 'O', 'S', 'T', 'Z'};
     int randIndex = rand() % blockTypes.size();
     char blockType = blockTypes[randIndex];
     return blockType;
+}
+
+char Level3::nonRandomSpawnBlock() {
+    char blockType;
+    if (file.is_open()) {
+        file >> blockType;
+        if (file.eof()) {
+            resetFile();
+            file >> blockType;
+        }
+    } else {
+        throw std::runtime_error("Level3: Unable to open block sequence file.");
+    }
+    return blockType;
+}
+
+Level4::Level4() {
+    levelNum = 4;
 }
