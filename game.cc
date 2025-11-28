@@ -7,10 +7,10 @@ import <stdexcept>;
 export class Game {
     Board *player1;
     Board *player2;
-    Level *level1;
-    Level *level2;
+    LevelManager *level1;
+    LevelManager *level2;
     public:
-        Game(Board *p1, Board *p2, Level *l1, Level *l2) : player1{p1}, player2{p2}, level1{l1}, level2{l2} {}
+        Game(Board *p1, Board *p2, LevelManager *l1, LevelManager *l2) : player1{p1}, player2{p2}, level1{l1}, level2{l2} {}
         /** 
          * Runs the game loop, might throw exceptions.
          * @param viewver The Viewver instance to render the game.

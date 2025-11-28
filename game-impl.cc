@@ -17,6 +17,11 @@ void Game::run(Viewver &viewver) {
         viewver.drawGraphics(*player1, *player2, level1, level2);
         std::cout << "Player 1's turn:" << std::endl;
         std::string cmd1 = player1->getInput();
+        if (cmd1 == "levelup") {
+            level1 = levelUp(1);
+        } else if (cmd1 == "leveldown") {
+            level1 = levelDown(1);
+        }
         std::cout << "Works" << std::endl;
         if (player1->getTerminate() || player2->getTerminate()) {
             break;
@@ -55,6 +60,26 @@ Board *Game::getBoard(int player) {
         return player1;
     } else if (player == 2) {
         return player2;
+    } else {
+        throw std::invalid_argument("Invalid player number");
+    }
+}
+
+Level *Game::levelUp(int player) {
+    if (player == 1) {
+        return level1->levelUp();
+    } else if (player == 2) {
+        return level2->levelUp();
+    } else {
+        throw std::invalid_argument("Invalid player number");
+    }
+}
+
+Level *Game::levelDown(int player) {
+    if (player == 1) {
+        return level1->levelDown();
+    } else if (player == 2) {
+        return level2->levelDown();
     } else {
         throw std::invalid_argument("Invalid player number");
     }
