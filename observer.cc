@@ -12,9 +12,7 @@ export class Subject {
         Observer *subscriber;
 
         // Notify the subscribed observer
-        void notifyBoard() {
-            subscriber->notify();
-        }
+        void notifyBoard();
     public:
         Subject(Observer *obs) : subscriber{obs} {}
         virtual ~Subject() = default;
