@@ -144,3 +144,8 @@ export class Z : public Block {
         Z(Observer *b) : Block{b, {{0, 2}, {1, 2}, {1, 3}, {2, 3}}, 'Z'} {}
 };
 
+export class B : public Block {
+
+    public:
+        B(Observer *b) : Block{b, {{5, 0}}, 'B'} {}
+};
