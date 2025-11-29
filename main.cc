@@ -12,13 +12,15 @@ const std::string BLOCK_SEQUENCE_FILE_P1 = "biquadris_sequence1.txt";
 const std::string BLOCK_SEQUENCE_FILE_P2 = "biquadris_sequence2.txt";
 
 int main(int argc, char **argv) {
-    char selectedBlock = 0;
-    if (argc == 2) {
-        selectedBlock = *argv[1];
+    bool textOnlyMode = false;
+    if (argc > 1) {
+        std::string arg1 = argv[1];
+        if (arg1 == "-text") {
+            textOnlyMode = true;
+        }
     }
     Game game = Game(1, 1);
-    Viewver viewver = Viewver(BOARD_WIDTH, BOARD_HEIGHT);
-
+    Viewver viewver = Viewver(BOARD_WIDTH, BOARD_HEIGHT, textOnlyMode);
     try {
         game.run(viewver);
     } catch (const std::exception &e) {
