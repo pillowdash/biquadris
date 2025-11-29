@@ -107,7 +107,6 @@ std::shared_ptr<Block> Board::getBlock()
   if (heavy)
   {
     block->IncHeaviness();
-    std::cout << "Works!!!!" << std::endl;
   }
   return block;
 }
