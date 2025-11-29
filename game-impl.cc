@@ -18,14 +18,20 @@ void Game::run(Viewver &viewver) {
         viewver.Draw(*player1, *player2, level1.get(), level2.get());
         std::cout << "Player 1's turn:" << std::endl;
         std::string cmd1 = player1->getInput();
-        commandManager(cmd1, 1);
+        while (!commandManager(cmd1, 1)) {
+            std::cout << "Invalid command for Player 1. Please enter again:" << std::endl;
+            cmd1 = player1->getInput();
+        }
         viewver.Draw(*player1, *player2, level1.get(), level2.get());
         player1->getCellsCopy(); 
         player2->getCellsCopy();
 
         std::cout << "Player 2's turn:" << std::endl;
         std::string cmd2 = player2->getInput();
-        commandManager(cmd2, 2);
+        while (!commandManager(cmd2, 2)) {
+            std::cout << "Invalid command for Player 2. Please enter again:" << std::endl;
+            cmd2 = player2->getInput();
+        }
 
         viewver.Draw(*player1, *player2, level1.get(), level2.get());
         player1->getCellsCopy();
@@ -69,10 +75,14 @@ Board *Game::getBoard(int player) {
     }
 }
 
-void Game::commandManager(std::string command, int player) {
+bool Game::commandManager(std::string command, int player) {
+    if (command == "left" || command == "right" || command == "down" ||
+        command == "clockwise" || command == "counterclockwise" || command == "drop") {
+        return true;
+    }
     if (command == "restart") {
         reset();
-        return;
+        return true;
     }
     if (player == 1) {
         if (command == "levelup") {
@@ -95,6 +105,8 @@ void Game::commandManager(std::string command, int player) {
             level1->setRandom(true);
             std::cout << "Player 1 is now random." << std::endl;
             player1->createNewBlock();
+        } else {
+            return false;
         }
     } else if (player == 2) {
         if (command == "levelup") {
@@ -117,10 +129,13 @@ void Game::commandManager(std::string command, int player) {
             level2->setRandom(true);
             std::cout << "Player 2 is now random." << std::endl;
             player2->createNewBlock();
+        } else {
+            return false;
         }
     } else {
         throw std::invalid_argument("Invalid player number");
     }
+    return true;
 }
 
 void Game::levelUp(int player) {

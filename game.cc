@@ -80,5 +80,5 @@ export class Game {
         void levelUp(int player);
         void levelDown(int player);
 
-        void commandManager(std::string command, int player);
+        bool commandManager(std::string command, int player);
 };
