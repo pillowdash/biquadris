@@ -122,6 +122,11 @@ std::shared_ptr<Block> Board::getBlock()
   return block;
 }
 
+void Board::createNewBlock() {
+  currentBlock = getBlock();
+  nextBlock = getBlock();
+}
+
 void Board::notify()
 {
   // Hummmmmm......

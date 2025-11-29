@@ -60,6 +60,8 @@ public:
 
   void placeBlock(Block *b);
 
+  void createNewBlock();
+
   bool getBlind() const { return isBlind; }
   void setBlind(bool b) { isBlind = b; }
   bool getTerminate() const {return isTerminate;}

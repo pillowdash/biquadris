@@ -16,6 +16,7 @@ export class Level {
         virtual ~Level() = default;
         virtual char spawnBlock() = 0;
         virtual void setFile(const std::string &filename) {}
+        virtual void setRandom(bool val) {}
         virtual int getLevelNum() const {
             return levelNum;
         }
@@ -60,7 +61,7 @@ export class Level3 : public Level {
 
         void resetFile();
 
-        void setRandom(bool val);
+        void setRandom(bool val) override;
 
         char spawnBlock() override;
 };

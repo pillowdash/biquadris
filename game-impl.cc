@@ -42,7 +42,11 @@ void Game::run(Viewver &viewver) {
 }
 
 void Game::reset() {
-    // Implementation to reset the game state
+    // Reset levels
+    level1 = std::make_unique<Level0>("biquadris_sequence1.txt");
+    level2 = std::make_unique<Level0>("biquadris_sequence2.txt");
+    player1 = std::make_unique<Board>(level1.get());
+    player2 = std::make_unique<Board>(level2.get());
 }
 
 Level *Game::getLevel(int player) {
@@ -66,31 +70,53 @@ Board *Game::getBoard(int player) {
 }
 
 void Game::commandManager(std::string command, int player) {
-    std::cout << "Command received for player " << player << ": " << command << std::endl;
+    if (command == "restart") {
+        reset();
+        return;
+    }
     if (player == 1) {
         if (command == "levelup") {
             levelUp(1);
             player1->setLevel(level1.get());
+            player1->createNewBlock();
         } else if (command == "leveldown") {
             levelDown(1);
             player1->setLevel(level1.get());
+            player1->createNewBlock();
         } else if (command == "norandom") {
             if (level1->getLevelNum() == 3 || level1->getLevelNum() == 4) {
                 std::string filemname;
                 std::cin >> filemname;
                 level1->setFile(filemname);
+                player1->createNewBlock();
                 std::cout << "Player 1 is not random: File set to " << filemname << std::endl;
             }
         } else if (command == "random") {
-
+            level1->setRandom(true);
+            std::cout << "Player 1 is now random." << std::endl;
+            player1->createNewBlock();
         }
     } else if (player == 2) {
         if (command == "levelup") {
             levelUp(2);
             player2->setLevel(level2.get());
+            //player2->createNewBlock();
         } else if (command == "leveldown") {
             levelDown(2);
             player2->setLevel(level2.get());
+            player2->createNewBlock();
+        } else if (command == "norandom") {
+            if (level2->getLevelNum() == 3 || level2->getLevelNum() == 4) {
+                std::string filemname;
+                std::cin >> filemname;
+                level2->setFile(filemname);
+                player2->createNewBlock();
+                std::cout << "Player 2 is not random: File set to " << filemname << std::endl;
+            }
+        } else if (command == "random") {
+            level2->setRandom(true);
+            std::cout << "Player 2 is now random." << std::endl;
+            player2->createNewBlock();
         }
     } else {
         throw std::invalid_argument("Invalid player number");
