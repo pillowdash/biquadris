@@ -2,7 +2,6 @@ CXX = g++-14
 CXXFLAGS = -std=c++20 -fmodules-ts -Wall -g
 LDFLAGS = -lX11
 EXEC = biquadris
-# Normalized object names (lowercase .o)
 OBJECTS = main.o game.o game-impl.o board.o board-impl.o viewver.o viewver-impl.o level.o level-impl.o block.o block-impl.o observer.o observer-impl.o window.o window-impl.o
 
 all: $(EXEC)
@@ -10,9 +9,6 @@ all: $(EXEC)
 $(EXEC): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC) $(LDFLAGS)
 
-# --- Compilation Rules ---
-
-# Note: Added '-o $@' to force the output filename to match the target name (lowercase)
 
 observer.o: observer.cc
 	$(CXX) $(CXXFLAGS) -c observer.cc -o $@
@@ -46,7 +42,6 @@ board.o: Board.cc block.o observer.o level.o
 board-impl.o: board-impl.cc board.o
 	$(CXX) $(CXXFLAGS) -c board-impl.cc -o $@
 
-# CRITICAL FIX: Mapping Viewver.cc -> viewver.o
 viewver.o: Viewver.cc window.o board.o level.o block.o
 	$(CXX) $(CXXFLAGS) -c Viewver.cc -o $@
 
