@@ -49,6 +49,10 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
 
     for (int r = 0; r < height; ++r) {
         for (int c = 0; c < width; ++c) {
+            if (p1.getBlind() && c >= 3 && r >= 3) {
+                std::cout << '?';
+                continue;
+            }
             Pos p{c, r};
             if (isBlockPosition(currentBlock1->getPositions(), p)) {
                 std::cout << currentBlock1->getType();
@@ -59,6 +63,10 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
         }
         std::cout << "        ";
         for (int c = 0; c < width; ++c) {
+            if (p2.getBlind() && c >= 3 && r >= 3) {
+                std::cout << '?';
+                continue;
+            }
             Pos p{c, r};
             if (isBlockPosition(currentBlock2->getPositions(), p)) {
                 std::cout << currentBlock2->getType();

@@ -36,15 +36,17 @@ export class Board : public Observer
   int height;
   int score;
   int highScore;
+  int linesCleared;
   shared_ptr<Block> currentBlock;
   shared_ptr<Block> nextBlock;
   bool isBlind;
   bool isTerminate;
+  bool specialEffectHeavy;
 
   void clearLines();
 
 public:
-  explicit Board(Level *lvl);
+  explicit Board(Level *lvl, int highScore = 0);
 
   std::string getInput();
 
@@ -56,7 +58,7 @@ public:
 
   bool cellHasChanged(int x, int y) const;
 
-  void incScore(int inc);
+  void incScore();
 
   void placeBlock(Block *b);
 
@@ -72,6 +74,9 @@ public:
   int getScore() const;
   Block *getCurrentBlock() const;
   Block *getNextBlock() const;
+
+  int getLinesCleared() const { return linesCleared; }
+  void resetLinesCleared() { linesCleared = 0; }
 
   // only called by Viewver-impl.cc
 

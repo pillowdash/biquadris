@@ -23,6 +23,7 @@ Cell &Cell::operator=(const Cell &other) {
 
 void Board::clearLines()
 {
+  int linesClearedHere = 0;
   for (int row = 0; row < height; ++row)
   {
 
@@ -38,6 +39,8 @@ void Board::clearLines()
 
     if (full)
     {
+      incScore();
+      ++linesClearedHere;
       for (int rowred = row; rowred > 0; --rowred)
       {
         cells[rowred] = move(cells[rowred - 1]);
@@ -52,10 +55,11 @@ void Board::clearLines()
       --row;
     }
   }
+  linesCleared = linesClearedHere;
 }
 
 Board::Board(Level *lvl) : level{lvl}, width{11}, height{18}, 
-  score{0}, highScore{0}, isBlind{false}, isTerminate{false}
+  score{0}, highScore{0}, linesCleared{0}, isBlind{false}, isTerminate{false}, specialEffectHeavy{false}
 {
   for (int r = 0; r < height; ++r)
   {
@@ -119,6 +123,10 @@ std::shared_ptr<Block> Board::getBlock()
   {
     block->IncHeaviness();
   }
+  if (specialEffectHeavy)
+  {
+    block->IncHeaviness();
+  }
   return block;
 }
 
@@ -129,7 +137,7 @@ void Board::createNewBlock() {
 
 void Board::notify()
 {
-  // Hummmmmm......
+  isBlind = false;
   if (currentBlock->getIsDropped())
   {
     placeBlock(currentBlock.get());
@@ -151,7 +159,36 @@ void Board::notify()
     placeBlock(currentBlock.get());
     currentBlock = nextBlock;
     nextBlock = getBlock();
-    std::cout << "last call" << std::endl;
+  }
+
+  if (getLinesCleared() > 1) {
+    resetLinesCleared();
+    bool specialEffected = false;
+    while (!specialEffected) {
+      string s = "";
+      std::cout << "enter a special effect to use (blind, heavy, force): " << std::endl;
+      std::cin >> s;
+      if (s == "blind") {
+        isBlind = true;
+        specialEffected = true;
+      } else if (s == "heavy") {
+        currentBlock->IncHeaviness();
+        specialEffectHeavy = true;
+        specialEffected = true;
+      } else if (s == "force") {
+        char blockType;
+        std::cout << "enter a block type to force (I, J, L, O, S, T, Z): ";
+        std::cin >> blockType;
+        if (blockType == 'I' || blockType == 'J' || blockType == 'L' ||
+            blockType == 'O' || blockType == 'S' || blockType == 'T' ||
+            blockType == 'Z') {
+          //force the next block to be of type blockType
+          specialEffected = true;
+        }
+      } else {
+        std::cout << "invalid special effect" << std::endl;
+      }
+    }
   }
 }
 
@@ -160,9 +197,11 @@ Cell *Board::getCellAt(int x, int y) const
   return &(*cells[y])[x];
 }
 
-void Board::incScore(int inc)
+void Board::incScore()
 {
-  score += inc;
+  for (int i = 0; i < level->getLevelNum() + 1; ++i) {
+    score++;
+  }
   if (score > highScore)
     highScore = score;
 }
