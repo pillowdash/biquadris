@@ -10,12 +10,11 @@ EXEC = biquadris
 
 all: $(EXEC)
 
-$(EXEC): $(SOURCES) $(MODDIR)
+$(EXEC): $(SOURCES)
+	$(CXX) $(HEADERFLAGS) $(HEADERS)
 	${CXX} ${CXXFLAGS} -c $(SOURCES)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC) -lX11
 
-$(MODDIR):
-	$(CXX) $(HEADERFLAGS) $(HEADERS)
 
 .PHONY: clean 
 clean:
