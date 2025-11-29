@@ -6,14 +6,13 @@ SOURCES = $(wildcard *.cc)
 OBJECTS = $(SOURCES:.cc=.o)
 
 HEADERS = iostream fstream memory vector stdexcept string cstdlib
-EXEC = a4q2
+EXEC = biquadris
 
 all: $(EXEC)
 
 $(EXEC): $(SOURCES) $(MODDIR)
 	${CXX} ${CXXFLAGS} -c $(SOURCES)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC)
-# rm -rf gcm.cache
 
 $(MODDIR):
 	$(CXX) $(HEADERFLAGS) $(HEADERS)
