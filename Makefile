@@ -2,13 +2,20 @@ CXX = g++-14
 CXXFLAGS = -std=c++20 -fmodules-ts -Wall -g
 LDFLAGS = -lX11
 EXEC = biquadris
+
+SYSTEM_MODULES = iostream vector string memory stdexcept cstdlib fstream
+
 OBJECTS = main.o game.o game-impl.o board.o board-impl.o viewver.o viewver-impl.o level.o level-impl.o block.o block-impl.o observer.o observer-impl.o window.o window-impl.o
 
 all: $(EXEC)
 
+$(SYSTEM_MODULES):
+	$(CXX) $(CXXFLAGS) -c -x c++-system-header $@
+
+$(OBJECTS): $(SYSTEM_MODULES)
+
 $(EXEC): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC) $(LDFLAGS)
-
 
 observer.o: observer.cc
 	$(CXX) $(CXXFLAGS) -c observer.cc -o $@
@@ -28,14 +35,12 @@ block.o: block.cc observer.o
 block-impl.o: block-impl.cc block.o
 	$(CXX) $(CXXFLAGS) -c block-impl.cc -o $@
 
-# CRITICAL FIX: Mapping Level.cc -> level.o
 level.o: Level.cc block.o
 	$(CXX) $(CXXFLAGS) -c Level.cc -o $@
 
 level-impl.o: Level-impl.cc level.o
 	$(CXX) $(CXXFLAGS) -c Level-impl.cc -o $@
 
-# CRITICAL FIX: Mapping Board.cc -> board.o
 board.o: Board.cc block.o observer.o level.o
 	$(CXX) $(CXXFLAGS) -c Board.cc -o $@
 

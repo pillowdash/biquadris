@@ -1,0 +1,223 @@
+module Game;
+import <stdexcept>;
+import <iostream>;
+import <string>;
+import <memory>;
+import Board;
+import Viewver;
+
+// g++20 observer.o block.o Level.o Level-impl.o board.o viewver.o viewver-impl.o game.o game-impl.o main.o -o test 
+
+void Game::run(Viewver &viewver) {
+    player1->initializeCellsCopy();
+    player2->initializeCellsCopy();
+    viewver.Draw(*player1, *player2, level1.get(), level2.get());
+    player1->getCellsCopy();
+    player2->getCellsCopy();
+    while (player1->getTerminate() == false && player2->getTerminate() == false) {
+        viewver.Draw(*player1, *player2, level1.get(), level2.get());
+        std::cout << "Player 1's turn:" << std::endl;
+        std::string cmd1 = player1->getInput();
+        while (!commandManager(cmd1, 1)) {
+            std::cout << "Invalid command for Player 1. Please enter again:" << std::endl;
+            cmd1 = player1->getInput();
+        }
+        
+        viewver.Draw(*player1, *player2, level1.get(), level2.get());
+        player1->getCellsCopy(); 
+        player2->getCellsCopy();
+
+        std::cout << "Player 2's turn:" << std::endl;
+        std::string cmd2 = player2->getInput();
+        while (!commandManager(cmd2, 2)) {
+            std::cout << "Invalid command for Player 2. Please enter again:" << std::endl;
+            cmd2 = player2->getInput();
+        }
+        viewver.Draw(*player1, *player2, level1.get(), level2.get());
+        player1->getCellsCopy();
+        player2->getCellsCopy();
+
+        // have trie of commands to handle all commands that are non left, right, rccw
+    }
+    std::cout << "Game Over!" << std::endl;
+    if (player1->getTerminate()) {
+        std::cout << "Player 2 Wins!" << std::endl;
+    } else if (player2->getTerminate()) {
+        std::cout << "Player 1 Wins!" << std::endl;
+    }
+}
+
+void Game::reset() {
+    // Reset levels
+    level1 = std::make_unique<Level0>("biquadris_sequence1.txt");
+    level2 = std::make_unique<Level0>("biquadris_sequence2.txt");
+    player1 = std::make_unique<Board>(level1.get());
+    player2 = std::make_unique<Board>(level2.get());
+}
+
+Level *Game::getLevel(int player) {
+    if (player == 1) {
+        return level1.get();
+    } else if (player == 2) {
+        return level2.get();
+    } else {
+        throw std::invalid_argument("Invalid player number");
+    }
+}
+
+Board *Game::getBoard(int player) {
+    if (player == 1) {
+        return player1.get();
+    } else if (player == 2) {
+        return player2.get();
+    } else {
+        throw std::invalid_argument("Invalid player number");
+    }
+}
+
+bool Game::commandManager(std::string command, int player) {
+    if (command == "left" || command == "right" || command == "down" ||
+        command == "clockwise" || command == "counterclockwise" || command == "drop") {
+        return true;
+    }
+    if (command == "restart") {
+        reset();
+        return true;
+    }
+    if (player == 1) {
+        if (command == "levelup") {
+            levelUp(1);
+            player1->setLevel(level1.get());
+            player1->createNewBlock();
+        } else if (command == "leveldown") {
+            levelDown(1);
+            player1->setLevel(level1.get());
+            player1->createNewBlock();
+        } else if (command == "norandom") {
+            if (level1->getLevelNum() == 3 || level1->getLevelNum() == 4) {
+                std::string filemname;
+                std::cin >> filemname;
+                level1->setFile(filemname);
+                player1->createNewBlock();
+                std::cout << "Player 1 is not random: File set to " << filemname << std::endl;
+            }
+        } else if (command == "random") {
+            level1->setRandom(true);
+            std::cout << "Player 1 is now random." << std::endl;
+            player1->createNewBlock();
+        } else if (command == "sequence") {
+            //... Causes a g++20 compilation error somehow...
+        } else {
+            return false;
+        }
+    } else if (player == 2) {
+        if (command == "levelup") {
+            levelUp(2);
+            player2->setLevel(level2.get());
+            //player2->createNewBlock();
+        } else if (command == "leveldown") {
+            levelDown(2);
+            player2->setLevel(level2.get());
+            player2->createNewBlock();
+        } else if (command == "norandom") {
+            if (level2->getLevelNum() == 3 || level2->getLevelNum() == 4) {
+                std::string filemname;
+                std::cin >> filemname;
+                level2->setFile(filemname);
+                player2->createNewBlock();
+                std::cout << "Player 2 is not random: File set to " << filemname << std::endl;
+            }
+        } else if (command == "random") {
+            level2->setRandom(true);
+            std::cout << "Player 2 is now random." << std::endl;
+            player2->createNewBlock();
+        } else if (command == "sequence") {
+            //... Causes a g++20 compilation error somehow...
+        } else {
+            return false;
+        }
+    } else {
+        throw std::invalid_argument("Invalid player number");
+    }
+    return true;
+}
+
+void Game::levelUp(int player) {
+    if (player == 1) {
+        switch (level1->getLevelNum()) {
+            case 0:
+                level1 = std::make_unique<Level1>();
+                break;
+            case 1:
+                level1 = std::make_unique<Level2>();
+                break;
+            case 2:
+                level1 = std::make_unique<Level3>();
+                break;
+            case 3:
+                level1 = std::make_unique<Level4>();
+                break;
+            default:
+                break;
+        }
+    } else if (player == 2) {
+        switch (level2->getLevelNum()) {
+            case 0:
+                level2 = std::make_unique<Level1>();
+                break;
+            case 1:
+                level2 = std::make_unique<Level2>();
+                break;
+            case 2:
+                level2 = std::make_unique<Level3>();
+                break;
+            case 3:
+                level2 = std::make_unique<Level4>();
+                break;
+            default:
+                break;
+        }
+    } else {
+        throw std::invalid_argument("Invalid player number");
+    }
+}
+
+void Game::levelDown(int player) {
+    if (player == 1) {
+        switch (level1->getLevelNum()) {
+            case 4:
+                level1 = std::make_unique<Level3>();
+                break;
+            case 3:
+                level1 = std::make_unique<Level2>();
+                break;
+            case 2:
+                level1 = std::make_unique<Level1>();
+                break;
+            case 1:
+                level1 = std::make_unique<Level0>("biquadris_sequence.txt");
+                break;
+            default:
+                break;
+        }
+    } else if (player == 2) {
+        switch (level2->getLevelNum()) {
+            case 4:
+                level2 = std::make_unique<Level3>();
+                break;
+            case 3:
+                level2 = std::make_unique<Level2>();
+                break;
+            case 2:
+                level2 = std::make_unique<Level1>();
+                break;
+            case 1:
+                level2 = std::make_unique<Level0>("biquadris_sequence.txt");
+                break;
+            default:
+                break;
+        }
+    } else {
+        throw std::invalid_argument("Invalid player number");
+    }
+}
