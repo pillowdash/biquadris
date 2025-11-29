@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++20 -fmodules-ts -Wall -g
 LDFLAGS = -lX11
 EXEC = biquadris
 
-SYSTEM_MODULES = iostream vector string memory stdexcept cstdlib fstream
+SYSTEM_MODULES = iostream fstream memory vector stdexcept string cstdlib
 
 OBJECTS = main.o game.o game-impl.o board.o board-impl.o viewver.o viewver-impl.o level.o level-impl.o block.o block-impl.o observer.o observer-impl.o window.o window-impl.o
 
