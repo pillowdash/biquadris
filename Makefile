@@ -2,66 +2,65 @@ CXX = g++-14
 CXXFLAGS = -std=c++20 -fmodules-ts -Wall -g
 LDFLAGS = -lX11
 EXEC = biquadris
+# Normalized object names (lowercase .o)
 OBJECTS = main.o game.o game-impl.o board.o board-impl.o viewver.o viewver-impl.o level.o level-impl.o block.o block-impl.o observer.o observer-impl.o window.o window-impl.o
-
-SYSTEM_HEADERS = iostream vector string memory stdexcept cstdlib fstream
 
 all: $(EXEC)
 
 $(EXEC): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC) $(LDFLAGS)
 
-observer.o:
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header iostream
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header vector
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header string
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header memory
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header stdexcept
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header cstdlib
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header fstream
-	$(CXX) $(CXXFLAGS) observer.cc -c
+# --- Compilation Rules ---
 
-observer-impl.o: observer.o
-	$(CXX) $(CXXFLAGS) observer-impl.cc -c
+# Note: Added '-o $@' to force the output filename to match the target name (lowercase)
 
-window.o: observer.o
-	$(CXX) $(CXXFLAGS) window.cc -c
+observer.o: observer.cc
+	$(CXX) $(CXXFLAGS) -c observer.cc -o $@
 
-window-impl.o: window.o
-	$(CXX) $(CXXFLAGS) window-impl.cc -c
+observer-impl.o: observer-impl.cc observer.o
+	$(CXX) $(CXXFLAGS) -c observer-impl.cc -o $@
 
-block.o: observer.o
-	$(CXX) $(CXXFLAGS) block.cc -c
+window.o: window.cc
+	$(CXX) $(CXXFLAGS) -c window.cc -o $@
 
-block-impl.o: block.o
-	$(CXX) $(CXXFLAGS) block-impl.cc -c
+window-impl.o: window-impl.cc window.o
+	$(CXX) $(CXXFLAGS) -c window-impl.cc -o $@
 
-level.o: block.o
-	$(CXX) $(CXXFLAGS) Level.cc -c
+block.o: block.cc observer.o
+	$(CXX) $(CXXFLAGS) -c block.cc -o $@
 
-level-impl.o: level.o
-	$(CXX) $(CXXFLAGS) Level-impl.cc -c
+block-impl.o: block-impl.cc block.o
+	$(CXX) $(CXXFLAGS) -c block-impl.cc -o $@
 
-board.o: block.o observer.o level.o
-	$(CXX) $(CXXFLAGS) Board.cc -c
+# CRITICAL FIX: Mapping Level.cc -> level.o
+level.o: Level.cc block.o
+	$(CXX) $(CXXFLAGS) -c Level.cc -o $@
 
-board-impl.o: board.o
-	$(CXX) $(CXXFLAGS) board-impl.cc -c
+level-impl.o: Level-impl.cc level.o
+	$(CXX) $(CXXFLAGS) -c Level-impl.cc -o $@
 
-viewver.o: window.o board.o level.o block.o
-	$(CXX) $(CXXFLAGS) Viewver.cc -c
+# CRITICAL FIX: Mapping Board.cc -> board.o
+board.o: Board.cc block.o observer.o level.o
+	$(CXX) $(CXXFLAGS) -c Board.cc -o $@
 
-viewver-impl.o: viewver.o
-	$(CXX) $(CXXFLAGS) Viewver-impl.cc -c
+board-impl.o: board-impl.cc board.o
+	$(CXX) $(CXXFLAGS) -c board-impl.cc -o $@
 
-game.o: board.o level.o viewver.o
-	$(CXX) $(CXXFLAGS) game.cc -c
+# CRITICAL FIX: Mapping Viewver.cc -> viewver.o
+viewver.o: Viewver.cc window.o board.o level.o block.o
+	$(CXX) $(CXXFLAGS) -c Viewver.cc -o $@
 
-game-impl.o: game.o
-	$(CXX) $(CXXFLAGS) game-impl.cc -c
+viewver-impl.o: Viewver-impl.cc viewver.o
+	$(CXX) $(CXXFLAGS) -c Viewver-impl.cc -o $@
 
-main.o: game.o board.o level.o viewver.o
-	$(CXX) $(CXXFLAGS) main.cc -c
+game.o: game.cc board.o level.o viewver.o
+	$(CXX) $(CXXFLAGS) -c game.cc -o $@
+
+game-impl.o: game-impl.cc game.o
+	$(CXX) $(CXXFLAGS) -c game-impl.cc -o $@
+
+main.o: main.cc game.o board.o level.o viewver.o
+	$(CXX) $(CXXFLAGS) -c main.cc -o $@
 
 .PHONY: clean
 
