@@ -6,7 +6,11 @@ import <iostream>;
 import <string>;
 import <vector>;
 
-Viewver::Viewver(int w, int h) : width{w}, height{h}, window{500, 500} {}
+Viewver::Viewver(int w, int h, bool textOnlyMode) : width{w}, height{h}, textOnly{textOnlyMode} {
+    if (!textOnly) {
+        window = std::make_unique<Xwindow>(w, h);
+    }
+}
 
 bool isBlockPosition(const std::vector<Pos> &positions, Pos position) {
     for (const auto &pos : positions) {
@@ -25,6 +29,8 @@ bool Viewver::isBlockStillThere(int x, int y, const std::vector<Pos> &positions)
     }
     return false;
 }
+
+
 
 void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, const Level* level_p2) const {
     std::cout << "Level     " << level_p1->getLevelNum() << "        "
@@ -75,12 +81,11 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
 
 
     // --- TEXT HEADER ---
-    window.drawString(20, 20,  "Level: " + std::to_string(level_p1->getLevelNum()));
-    window.drawString(220, 20, "Level: " + std::to_string(level_p2->getLevelNum()));
+    window->drawString(20, 20,  "Level: " + std::to_string(level_p1->getLevelNum()));
+    window->drawString(220, 20, "Level: " + std::to_string(level_p2->getLevelNum()));
 
-    window.drawString(20, 40,  "Score: " + std::to_string(p1.getScore()));
-    window.drawString(220, 40, "Score: " + std::to_string(p2.getScore()));
-
+    window->drawString(20, 40,  "Score: " + std::to_string(p1.getScore()));
+    window->drawString(220, 40, "Score: " + std::to_string(p2.getScore()));
     const int cellSize = 20;
     const int p1OffsetX = 20;
     const int p1OffsetY = 70;
@@ -101,7 +106,7 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
             if (isBlockPosition(pos1, p)) {
                 // falling block overrides board
                 int drawColour = Xwindow::Cyan;  
-                window.fillRectangle(
+                window->fillRectangle(
                     p1OffsetX + c * cellSize,
                     p1OffsetY + r * cellSize,
                     cellSize, cellSize,
@@ -119,7 +124,7 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
                 else if (colour == 'T') drawColour = Xwindow::Magenta;
                 else if (colour == 'O') drawColour = Xwindow::Yellow;
 
-                window.fillRectangle(
+                window->fillRectangle(
                     p1OffsetX + c * cellSize,
                     p1OffsetY + r * cellSize,
                     cellSize, cellSize,
@@ -135,7 +140,7 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
             Pos p{c, r};
             if (isBlockPosition(pos2, p)) {
                 int drawColour = Xwindow::Cyan;
-                window.fillRectangle(
+                window->fillRectangle(
                     p2OffsetX + c * cellSize,
                     p2OffsetY + r * cellSize,
                     cellSize, cellSize,
@@ -152,7 +157,7 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
                 else if (colour == 'T') drawColour = Xwindow::Magenta;
                 else if (colour == 'O') drawColour = Xwindow::Yellow;
 
-                window.fillRectangle(
+                window->fillRectangle(
                     p2OffsetX + c * cellSize,
                     p2OffsetY + r * cellSize,
                     cellSize, cellSize,
@@ -163,13 +168,22 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
     }
 
     // --- NEXT BLOCK ---
-    window.drawString(p1OffsetX,  height * cellSize + 110,
+    window->drawString(p1OffsetX,  height * cellSize + 110,
                       "Next: " + std::string(1, p1.getNextBlock()->getType()));
 
-    window.drawString(p2OffsetX, height * cellSize + 110,
+    window->drawString(p2OffsetX, height * cellSize + 110,
                       "Next: " + std::string(1, p2.getNextBlock()->getType()));
     previousCBPosP1 = p1.getCurrentBlock()->getPositions();
     previousCBPosP2 = p2.getCurrentBlock()->getPositions();
+}
+
+void Viewver::Draw(const Board &p1, const Board &p2,
+                   const Level* level_p1, const Level* level_p2) {
+    if (textOnly) {
+        drawGrid(p1, p2, level_p1, level_p2);
+    } else {
+        drawGraphics(p1, p2, level_p1, level_p2);
+    }
 }
 
 /*

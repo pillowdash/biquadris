@@ -11,18 +11,15 @@ import Viewver;
 void Game::run(Viewver &viewver) {
     player1->initializeCellsCopy();
     player2->initializeCellsCopy();
-    viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
-    viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+    viewver.Draw(*player1, *player2, level1.get(), level2.get());
     player1->getCellsCopy();
     player2->getCellsCopy();
     while (player1->getTerminate() == false && player2->getTerminate() == false) {
-        viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
-        viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+        viewver.Draw(*player1, *player2, level1.get(), level2.get());
         std::cout << "Player 1's turn:" << std::endl;
         std::string cmd1 = player1->getInput();
         commandManager(cmd1, 1);
-        viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
-        viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+        viewver.Draw(*player1, *player2, level1.get(), level2.get());
         player1->getCellsCopy(); 
         player2->getCellsCopy();
 
@@ -30,8 +27,7 @@ void Game::run(Viewver &viewver) {
         std::string cmd2 = player2->getInput();
         commandManager(cmd2, 2);
 
-        viewver.drawGrid(*player1, *player2, level1.get(), level2.get());
-        viewver.drawGraphics(*player1, *player2, level1.get(), level2.get());
+        viewver.Draw(*player1, *player2, level1.get(), level2.get());
         player1->getCellsCopy();
         player2->getCellsCopy();
 
