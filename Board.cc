@@ -17,16 +17,7 @@ export class Cell
 public:
   Cell(int x = 0, int y = 0, char c = ' ') : x{x}, y{y}, color{c}, tick{0} {}
   Cell(const Cell &other) = default;
-  Cell &operator=(const Cell &other) {
-    if (this == &other) {
-      return *this;
-    }
-    x = other.x;
-    y = other.y;
-    color = other.color;
-    tick = other.tick;
-    return *this;
-  }
+  Cell &operator=(const Cell &other);
   int getX() const;
   int getY() const;
   char getColor() const;

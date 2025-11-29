@@ -28,17 +28,9 @@ export class Level0 : public Level {
     std::ifstream file;
     std::string filename;
     public:
-        Level0(const std::string &filename) : filename{filename} {
-            levelNum = 0; 
-            file.open(filename);
-        }
+        Level0(const std::string &filename);
 
-        void resetFile() {
-            if (file.is_open()) {
-                file.close();
-            }
-            file.open(filename);
-        }
+        void resetFile();
 
         char spawnBlock() override;
 };
@@ -64,25 +56,11 @@ export class Level3 : public Level {
         char nonRandomSpawnBlock();
     public:
         Level3();
-        void setFile(const std::string &filename) override {
-            this->filename = filename;
-            if (file.is_open()) {
-                file.close();
-            }
-            file.open(filename);
-            israndom = false;
-        }
+        void setFile(const std::string &filename) override;
 
-        void resetFile() {
-            if (file.is_open()) {
-                file.close();
-            }
-            file.open(filename);
-        }
+        void resetFile();
 
-        void setRandom(bool val) {
-            israndom = val;
-        }
+        void setRandom(bool val);
 
         char spawnBlock() override;
 };

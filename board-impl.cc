@@ -9,6 +9,17 @@ int Cell::getTick() const { return tick; }
 void Cell::setColor(char c) { color = c; }
 void Cell::incrementTick() { ++tick; }
 
+Cell &Cell::operator=(const Cell &other) {
+  if (this == &other) {
+    return *this;
+  }
+  x = other.x;
+  y = other.y;
+  color = other.color;
+  tick = other.tick;
+  return *this;
+}
+
 
 void Board::clearLines()
 {

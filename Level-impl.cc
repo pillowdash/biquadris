@@ -10,6 +10,18 @@ import Block;
 
 Level::Level() : levelNum{0} {} 
 
+Level0::Level0(const std::string &filename) : filename{filename} {
+    levelNum = 0; 
+    file.open(filename);
+}
+
+
+void Level0::resetFile() {
+    if (file.is_open()) {
+        file.close();
+    }
+    file.open(filename);
+}
 
 char Level0::spawnBlock() {
     char blockType;
@@ -53,6 +65,26 @@ char Level2::spawnBlock() {
 Level3::Level3() {
     isheavy = true;
     levelNum = 3;
+}
+
+void Level3::setFile(const std::string &filename) {
+    this->filename = filename;
+    if (file.is_open()) {
+        file.close();
+    }
+    file.open(filename);
+    israndom = false;
+}
+
+void Level3::resetFile() {
+    if (file.is_open()) {
+        file.close();
+    }
+    file.open(filename);
+}
+
+void Level3::setRandom(bool val) {
+    israndom = val;
 }
 
 char Level3::spawnBlock() {
