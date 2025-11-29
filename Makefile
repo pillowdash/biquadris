@@ -12,7 +12,7 @@ all: $(EXEC)
 
 $(EXEC): $(SOURCES) $(MODDIR)
 	${CXX} ${CXXFLAGS} -c $(SOURCES)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC) -lX11
 
 $(MODDIR):
 	$(CXX) $(HEADERFLAGS) $(HEADERS)
