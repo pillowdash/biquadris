@@ -10,10 +10,10 @@ import Block;
 
 Level::Level() : levelNum{0} {} 
 
-Level0::Level0(const std::string &filename) : filename{filename} {
-    levelNum = 0; 
-    file.open(filename);
-}
+// Level0::Level0(const std::string &filename) : filename{filename} {
+//     levelNum = 0; 
+//     file.open(filename);
+// }
 
 
 void Level0::resetFile() {

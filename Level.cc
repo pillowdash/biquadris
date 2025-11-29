@@ -29,7 +29,11 @@ export class Level0 : public Level {
     std::ifstream file;
     std::string filename;
     public:
-        Level0(const std::string &filename);
+        Level0(const std::string &filename) : filename{filename} {
+            levelNum = 0; 
+            file.open(filename);
+        }
+
 
         void resetFile();
 
