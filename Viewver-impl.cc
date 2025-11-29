@@ -49,7 +49,7 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
 
     for (int r = 0; r < height; ++r) {
         for (int c = 0; c < width; ++c) {
-            if (p1.getBlind() && c >= 3 && r >= 3) {
+            if (p1.getBlind() && r >= 3) {
                 std::cout << '?';
                 continue;
             }
@@ -63,7 +63,7 @@ void Viewver::drawGrid(const Board &p1, const Board &p2, const Level* level_p1, 
         }
         std::cout << "        ";
         for (int c = 0; c < width; ++c) {
-            if (p2.getBlind() && c >= 3 && r >= 3) {
+            if (p2.getBlind() && r >= 3) {
                 std::cout << '?';
                 continue;
             }
