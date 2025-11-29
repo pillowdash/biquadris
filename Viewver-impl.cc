@@ -8,7 +8,7 @@ import <vector>;
 
 Viewver::Viewver(int w, int h, bool textOnlyMode) : width{w}, height{h}, textOnly{textOnlyMode} {
     if (!textOnly) {
-        window = std::make_unique<Xwindow>(w, h);
+        window = std::make_unique<Xwindow>(500, 500);
     }
 }
 
@@ -182,6 +182,7 @@ void Viewver::Draw(const Board &p1, const Board &p2,
     if (textOnly) {
         drawGrid(p1, p2, level_p1, level_p2);
     } else {
+        drawGrid(p1, p2, level_p1, level_p2);
         drawGraphics(p1, p2, level_p1, level_p2);
     }
 }

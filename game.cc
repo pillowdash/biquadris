@@ -11,10 +11,11 @@ export class Game {
     std::unique_ptr<Board> player1;
     std::unique_ptr<Board> player2;
     public:
-        Game(int level1, int level2) {
+        Game(int level1, int level2, std::string file1 = "biquadris_sequence1.txt",
+             std::string file2 = "biquadris_sequence2.txt") {
             switch (level1) {
                 case 0:
-                    this->level1 = std::make_unique<Level0>("biquadris_sequence1.txt");
+                    this->level1 = std::make_unique<Level0>(file1);
                     break;
                 case 1:
                     this->level1 = std::make_unique<Level1>();
@@ -34,7 +35,7 @@ export class Game {
 
             switch (level2) {
                 case 0:
-                    this->level2 = std::make_unique<Level0>("biquadris_sequence2.txt");
+                    this->level2 = std::make_unique<Level0>(file2);
                     break;
                 case 1:
                     this->level2 = std::make_unique<Level1>();
