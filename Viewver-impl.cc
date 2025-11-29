@@ -131,6 +131,7 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
                 else if (colour == 'Z') drawColour = Xwindow::Red;
                 else if (colour == 'T') drawColour = Xwindow::Magenta;
                 else if (colour == 'O') drawColour = Xwindow::Yellow;
+                else if (colour == 'B') drawColour = Xwindow::Brown;
 
                 window->fillRectangle(
                     p1OffsetX + c * cellSize,
@@ -164,6 +165,7 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
                 else if (colour == 'Z') drawColour = Xwindow::Red;
                 else if (colour == 'T') drawColour = Xwindow::Magenta;
                 else if (colour == 'O') drawColour = Xwindow::Yellow;
+                else if (colour == 'B') drawColour = Xwindow::Brown;
 
                 window->fillRectangle(
                     p2OffsetX + c * cellSize,
