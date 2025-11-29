@@ -46,7 +46,7 @@ export class Board : public Observer
   void clearLines();
 
 public:
-  explicit Board(Level *lvl, int highScore = 0);
+  explicit Board(Level *lvl);
 
   std::string getInput();
 
