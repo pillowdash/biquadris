@@ -191,13 +191,33 @@ void Board::notify()
         if (blockType == 'I' || blockType == 'J' || blockType == 'L' ||
             blockType == 'O' || blockType == 'S' || blockType == 'T' ||
             blockType == 'Z') {
-          //force the next block to be of type blockType
+          forceBlock(std::string(1, blockType));
           specialEffected = true;
         }
       } else {
         std::cout << "invalid special effect" << std::endl;
       }
     }
+  }
+}
+
+void Board::forceBlock(std::string type) {
+  if (type == "I") {
+    currentBlock = std::make_shared<I>(this);
+  } else if (type == "J") {
+    currentBlock = std::make_shared<J>(this);
+  } else if (type == "L") {
+    currentBlock = std::make_shared<L>(this);
+  } else if (type == "O") {
+    currentBlock = std::make_shared<O>(this);
+  } else if (type == "S") {
+    currentBlock = std::make_shared<S>(this);
+  } else if (type == "T") {
+    currentBlock = std::make_shared<T>(this);
+  } else if (type == "Z") {
+    currentBlock = std::make_shared<Z>(this);
+  } else {
+    throw std::invalid_argument("Invalid block type for force");
   }
 }
 

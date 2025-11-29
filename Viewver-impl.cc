@@ -8,7 +8,7 @@ import <vector>;
 
 Viewver::Viewver(int w, int h, bool textOnlyMode) : width{w}, height{h}, textOnly{textOnlyMode} {
     if (!textOnly) {
-        window = std::make_unique<Xwindow>(500, 500);
+        window = std::make_unique<Xwindow>(550, 550);
     }
 }
 
@@ -90,15 +90,15 @@ void Viewver::drawGraphics(const Board &p1, const Board &p2,
 
     // --- TEXT HEADER ---
     window->drawString(20, 20,  "Level: " + std::to_string(level_p1->getLevelNum()));
-    window->drawString(220, 20, "Level: " + std::to_string(level_p2->getLevelNum()));
+    window->drawString(270, 20, "Level: " + std::to_string(level_p2->getLevelNum()));
 
     window->drawString(20, 40,  "Score: " + std::to_string(p1.getScore()));
-    window->drawString(220, 40, "Score: " + std::to_string(p2.getScore()));
+    window->drawString(270, 40, "Score: " + std::to_string(p2.getScore()));
     const int cellSize = 20;
     const int p1OffsetX = 20;
     const int p1OffsetY = 70;
 
-    const int p2OffsetX = 220;
+    const int p2OffsetX = 270;
     const int p2OffsetY = 70;
 
     Block *currentBlock1 = p1.getCurrentBlock();

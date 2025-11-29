@@ -32,6 +32,7 @@ export class Controller : public Subject {
     public:
         bool getIsDropped() const;
         string getInput();
+        string setInput(string cmd);
 
         virtual void MoveLeft() = 0;
         virtual void MoveRight() = 0;

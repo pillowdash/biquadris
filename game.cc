@@ -4,6 +4,8 @@ import Board;
 import Level;
 import Viewver;
 import <stdexcept>;
+import <string>;
+import <iostream>;
 
 export class Game {
     std::unique_ptr<Level> level1;
@@ -81,4 +83,6 @@ export class Game {
         void levelDown(int player);
 
         bool commandManager(std::string command, int player);
+
+        ~Game() = default;
 };

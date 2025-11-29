@@ -37,6 +37,26 @@ string Controller::getInput() {
     return cmd;
 }
 
+string Controller::setInput(string cmd) {
+    std::cout << "Received command: " << cmd << std::endl;
+    if (cmd == "left") {
+        MoveLeft();
+    } else if (cmd == "right") {
+        // Move Right
+        MoveRight();
+    } else if (cmd == "clockwise") {
+        // Rotate Clockwise
+        RotateClockWise();
+    } else if (cmd == "counterclockwise") {
+        // Rotate CounterClockwise
+        RotateCounterClockWise();
+    } else if (cmd == "drop") {
+        isDropped = true;
+        notifyBoard();
+    }
+    return cmd;
+}
+
 //------
 
 

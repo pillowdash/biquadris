@@ -22,6 +22,7 @@ void Game::run(Viewver &viewver) {
             std::cout << "Invalid command for Player 1. Please enter again:" << std::endl;
             cmd1 = player1->getInput();
         }
+        
         viewver.Draw(*player1, *player2, level1.get(), level2.get());
         player1->getCellsCopy(); 
         player2->getCellsCopy();
@@ -32,7 +33,6 @@ void Game::run(Viewver &viewver) {
             std::cout << "Invalid command for Player 2. Please enter again:" << std::endl;
             cmd2 = player2->getInput();
         }
-
         viewver.Draw(*player1, *player2, level1.get(), level2.get());
         player1->getCellsCopy();
         player2->getCellsCopy();
@@ -105,6 +105,8 @@ bool Game::commandManager(std::string command, int player) {
             level1->setRandom(true);
             std::cout << "Player 1 is now random." << std::endl;
             player1->createNewBlock();
+        } else if (command == "sequence") {
+            //... Causes a g++20 compilation error somehow...
         } else {
             return false;
         }
@@ -129,6 +131,8 @@ bool Game::commandManager(std::string command, int player) {
             level2->setRandom(true);
             std::cout << "Player 2 is now random." << std::endl;
             player2->createNewBlock();
+        } else if (command == "sequence") {
+            //... Causes a g++20 compilation error somehow...
         } else {
             return false;
         }
