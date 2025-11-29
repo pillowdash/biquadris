@@ -59,7 +59,8 @@ void Board::clearLines()
 }
 
 Board::Board(Level *lvl) : level{lvl}, width{11}, height{18}, 
-  score{0}, highScore{0}, linesCleared{0}, isBlind{false}, isTerminate{false}, specialEffectHeavy{false}
+  score{0}, highScore{0}, linesCleared{0}, isBlind{false}, 
+  isTerminate{false}, specialEffectHeavy{false}, timeSinceLastClear{0}
 {
   for (int r = 0; r < height; ++r)
   {
@@ -119,6 +120,7 @@ std::shared_ptr<Block> Board::getBlock()
   {
     throw std::invalid_argument("Invalid block type");
   }
+  // stacking heaviness
   if (heavy)
   {
     block->IncHeaviness();
@@ -137,6 +139,7 @@ void Board::createNewBlock() {
 
 void Board::notify()
 {
+  timeSinceLastClear++;
   isBlind = false;
   if (currentBlock->getIsDropped())
   {
@@ -159,6 +162,12 @@ void Board::notify()
     placeBlock(currentBlock.get());
     currentBlock = nextBlock;
     nextBlock = getBlock();
+  }
+
+  if (timeSinceLastClear > 5 && level->getLevelNum() >= 4) {
+    std::shared_ptr<B> specialBlock = std::make_shared<B>(this);
+    placeBlock(specialBlock.get());
+    timeSinceLastClear = 0;
   }
 
   if (getLinesCleared() > 1) {

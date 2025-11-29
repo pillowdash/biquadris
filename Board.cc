@@ -42,6 +42,7 @@ export class Board : public Observer
   bool isBlind;
   bool isTerminate;
   bool specialEffectHeavy;
+  int timeSinceLastClear;
 
   void clearLines();
 
