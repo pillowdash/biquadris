@@ -45,6 +45,7 @@ export class Board : public Observer
   int timeSinceLastClear;
 
   void clearLines();
+  void forceBlock(std::string type);
 
 public:
   explicit Board(Level *lvl);
